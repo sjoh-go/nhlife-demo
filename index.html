@@ -1,0 +1,3898 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NH농협생명 × Upstage | 안내장 자동 검수 시스템</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<!-- PDF.js for client-side PDF rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+/* ============================================================
+ DESIGN TOKENS — Upstage + NH농협생명
+ ============================================================ */
+:root {
+ --ups-black: #000000;
+ --ups-dark-grey: #434343;
+ --ups-mid-grey: #666666;
+ --ups-light-grey: #f3f3f3;
+ --ups-gradient-start: #BFBFBF;
+ --ups-gradient-end: #D8C6F8;
+ --ups-purple: #8B6FE8;
+ --ups-purple-deep: #6B4FC8;
+ --ups-purple-soft: #EFE6FF;
+
+ --nh-green: #00A85A;
+ --nh-green-deep: #0A6A38;
+ --nh-green-soft: #E2F4EA;
+ --nh-yellow: #FCD04E;
+ --nh-yellow-soft: #FFF6D6;
+ --nh-navy: #233A6B;
+
+ --bg-page: #F6F8FA;
+ --bg-card: #FFFFFF;
+ --bg-soft: #FAFAFC;
+ --border-soft: #E5E7EB;
+ --border-mid: #D1D5DB;
+ --text-primary: #0F172A;
+ --text-secondary: #475569;
+ --text-tertiary: #94A3B8;
+ --success: #059669;
+ --success-soft: #D1FAE5;
+ --warning: #D97706;
+ --warning-soft: #FEF3C7;
+ --danger: #DC2626;
+ --danger-soft: #FEE2E2;
+ --info: #2563EB;
+ --info-soft: #DBEAFE;
+
+ --font-sans: 'Pretendard', 'Ups sans', 'Gothic A1', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+ --font-mono: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+
+ --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+ --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+ --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+ --shadow-lg: 0 8px 28px rgba(15, 23, 42, 0.10);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+ font-family: var(--font-sans);
+ font-size: 14px;
+ color: var(--text-primary);
+ background: var(--bg-page);
+ -webkit-font-smoothing: antialiased;
+ -moz-osx-font-smoothing: grayscale;
+ line-height: 1.5;
+ overflow: hidden;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea { font-family: inherit; }
+
+.upstage-gradient-bar {
+ height: 4px;
+ background: linear-gradient(to right, var(--ups-gradient-start) 0%, var(--ups-gradient-end) 100%);
+ width: 100%;
+}
+
+/* ============================================================ TOP BAR ============================================================ */
+.topbar {
+ background: var(--nh-green-deep);
+ color: white;
+ padding: 12px 24px;
+ display: flex; align-items: center; justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.nh-logo {
+ width: 36px; height: 36px;
+ background: var(--nh-green); border-radius: 50%;
+ display: flex; align-items: center; justify-content: center;
+ font-weight: 800; font-size: 13px; color: white;
+ border: 2px solid white;
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-text .name { font-weight: 700; font-size: 14px; }
+.brand-text .sub { font-size: 11px; opacity: 0.8; }
+.brand-sep { color: rgba(255,255,255,0.3); font-weight: 300; font-size: 18px; }
+.upstage-mark { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 12.5px; }
+.upstage-mark .dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, #BFBFBF, #D8C6F8); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-right .meta { font-size: 12px; opacity: 0.85; }
+.btn-settings {
+ display: inline-flex; align-items: center; gap: 6px;
+ background: rgba(255,255,255,0.12); color: white;
+ padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500;
+ transition: background 0.15s;
+}
+.btn-settings:hover { background: rgba(255,255,255,0.22); }
+
+/* ============================================================ PAGE HEADER ============================================================ */
+.page-head {
+ background: white;
+ padding: 14px 24px 12px;
+ border-bottom: 1px solid var(--border-soft);
+}
+.page-title-row {
+ display: flex; align-items: flex-end; justify-content: space-between;
+ margin-bottom: 12px; gap: 14px;
+}
+.page-title h1 {
+ font-size: 18px; font-weight: 700;
+ letter-spacing: -0.4px; color: var(--text-primary);
+ margin-bottom: 3px;
+}
+.page-title .desc {
+ font-size: 12px; color: var(--text-secondary);
+}
+.page-title .desc strong { color: var(--nh-green-deep); font-weight: 600; }
+.product-chip {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: var(--nh-green-soft); color: var(--nh-green-deep);
+ padding: 6px 12px; border-radius: 999px;
+ font-size: 11.5px; font-weight: 600;
+ border: 1px solid rgba(0, 168, 90, 0.2); white-space: nowrap;
+}
+.product-chip .pulse { width: 6px; height: 6px; background: var(--nh-green); border-radius: 50%; }
+
+.workflow {
+ display: flex; gap: 0;
+ background: var(--bg-soft);
+ border-radius: 10px;
+ padding: 4px;
+ border: 1px solid var(--border-soft);
+}
+.workflow-step {
+ flex: 1;
+ display: flex; align-items: center; gap: 8px;
+ padding: 6px 10px;
+ border-radius: 7px; font-size: 12px;
+ position: relative; cursor: pointer; transition: all 0.2s;
+}
+.workflow-step:not(:last-child)::after {
+ content: '→'; position: absolute; right: -5px;
+ color: var(--text-tertiary); font-size: 12px;
+}
+.workflow-step.active { background: white; box-shadow: var(--shadow-sm); font-weight: 600; }
+.workflow-step.done .step-num { background: var(--success); color: white; }
+.workflow-step.done .step-num::after { content: ''; }
+.workflow-step.done .step-num span { display: none; }
+.step-num {
+ width: 20px; height: 20px; border-radius: 50%;
+ background: var(--border-mid); color: white;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.workflow-step.active .step-num { background: var(--nh-green); }
+.step-label { line-height: 1.15; }
+.step-label .sub { font-size: 9.5px; color: var(--text-tertiary); font-weight: 400; }
+
+/* ============================================================ MAIN LAYOUT ============================================================ */
+.main {
+ display: grid;
+ grid-template-columns: 240px 1fr 1fr 380px;
+ gap: 0;
+ height: calc(100vh - 152px);
+ min-height: 600px;
+}
+
+/* ============================================================ SIDEBAR ============================================================ */
+.sidebar {
+ background: white;
+ border-right: 1px solid var(--border-soft);
+ padding: 16px 12px;
+ overflow-y: auto;
+}
+.sidebar-section { margin-bottom: 20px; }
+.sidebar-h {
+ font-size: 10.5px; font-weight: 700;
+ color: var(--text-tertiary);
+ text-transform: uppercase; letter-spacing: 0.6px;
+ margin-bottom: 8px; padding: 0 4px;
+}
+
+.doc-item {
+ display: flex; align-items: center; gap: 9px;
+ padding: 9px;
+ border-radius: 8px;
+ font-size: 12px;
+ cursor: pointer;
+ border: 1px solid transparent;
+ margin-bottom: 3px;
+ transition: all 0.15s;
+}
+.doc-item:hover { background: var(--bg-soft); }
+.doc-item.active {
+ background: var(--nh-green-soft);
+ border-color: rgba(0, 168, 90, 0.25);
+}
+.doc-item .doc-ico {
+ width: 28px; height: 34px;
+ border-radius: 4px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 8.5px; font-weight: 700; color: white;
+ flex-shrink: 0;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.doc-item .doc-ico.pdf { background: linear-gradient(135deg, #FF5757, #C53030); }
+.doc-item .doc-ico.hwp { background: linear-gradient(135deg, #4A90E2, #2C5AA0); }
+.doc-item .doc-ico.txt { background: linear-gradient(135deg, #64748B, #334155); }
+.doc-item .doc-meta { flex: 1; min-width: 0; }
+.doc-item .doc-name {
+ font-weight: 600; color: var(--text-primary);
+ overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+ font-size: 11.5px;
+}
+.doc-item .doc-sub { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+
+.cat-nav { display: flex; flex-direction: column; gap: 4px; }
+.cat-item {
+ display: flex; align-items: center; gap: 8px;
+ padding: 10px 11px;
+ border-radius: 8px;
+ font-size: 12.5px;
+ cursor: pointer;
+ border: 1px solid transparent;
+ transition: background 0.15s;
+}
+.cat-item:hover { background: var(--bg-soft); }
+.cat-item.active {
+ background: var(--nh-green-soft);
+ border-color: rgba(0, 168, 90, 0.2);
+ font-weight: 600;
+}
+.cat-item .cat-label { flex: 1; }
+.cat-item .cat-status {
+ width: 18px; height: 18px;
+ border-radius: 50%;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 10.5px;
+ flex-shrink: 0; font-weight: 700;
+}
+.cat-status.pending { background: var(--bg-soft); color: var(--text-tertiary); }
+.cat-status.ok { background: var(--success-soft); color: var(--success); }
+.cat-status.warn { background: var(--warning-soft); color: var(--warning); }
+.cat-status.err { background: var(--danger-soft); color: var(--danger); }
+
+.stat-grid {
+ display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.stat {
+ background: var(--bg-soft);
+ padding: 8px 9px;
+ border-radius: 7px;
+ border: 1px solid var(--border-soft);
+}
+.stat .num {
+ font-size: 19px; font-weight: 700;
+ font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.stat.ok .num { color: var(--success); }
+.stat.warn .num { color: var(--warning); }
+.stat.err .num { color: var(--danger); }
+.stat .lbl { font-size: 10px; color: var(--text-tertiary); margin-top: 1px; }
+
+/* ============================================================ COLUMN HEADER ============================================================ */
+.col-head {
+ background: white;
+ padding: 9px 14px;
+ border-bottom: 1px solid var(--border-soft);
+ display: flex; align-items: center; justify-content: space-between;
+ font-size: 12px; font-weight: 600;
+ position: sticky; top: 0; z-index: 10;
+}
+.col-head .col-tag {
+ display: inline-flex; align-items: center; gap: 6px;
+ padding: 3px 9px;
+ border-radius: 4px;
+ font-size: 10.5px;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.4px;
+}
+.col-head.guide .col-tag { background: var(--info-soft); color: var(--info); }
+.col-head.source .col-tag { background: var(--nh-green-soft); color: var(--nh-green-deep); }
+.col-head .col-title { color: var(--text-primary); font-size: 12.5px; }
+.col-head .col-meta { font-size: 10.5px; color: var(--text-tertiary); font-weight: 500; }
+
+/* ============================================================ GUIDE COL (안내장 + word bbox) ============================================================ */
+.guide-col {
+ background: #F1F3F6;
+ border-right: 1px solid var(--border-soft);
+ display: flex; flex-direction: column;
+ overflow: hidden;
+}
+.guide-canvas {
+ flex: 1;
+ overflow: auto;
+ padding: 16px;
+ scroll-behavior: smooth;
+}
+.pdf-page {
+ position: relative;
+ margin: 0 auto 16px;
+ background: white;
+ border-radius: 6px;
+ box-shadow: var(--shadow-sm);
+ overflow: hidden;
+ max-width: 900px;
+}
+.pdf-page img { display: block; width: 100%; height: auto; }
+.pdf-page-label {
+ position: absolute;
+ top: 6px; left: 8px;
+ font-size: 10px; font-weight: 600;
+ background: rgba(15,23,42,0.7);
+ color: white;
+ padding: 2px 6px;
+ border-radius: 3px;
+ z-index: 6;
+}
+
+/* word-level bbox — highlighter style (no border, color-tinted background only, blend behind glyphs) */
+.wbox {
+ position: absolute;
+ border: 0;
+ border-radius: 2px;
+ background: rgba(139, 111, 232, 0.32);
+ mix-blend-mode: multiply;
+ opacity: 0;
+ visibility: hidden;
+ transform: scale(0.94);
+ transition: opacity 0.22s, transform 0.22s, background 0.18s;
+ pointer-events: none;
+ z-index: 3;
+}
+.wbox.ok { background: rgba(5, 150, 105, 0.30); }
+.wbox.warn { background: rgba(252, 211, 77, 0.55); }
+.wbox.err { background: rgba(252, 165, 165, 0.72); }
+.wbox.active {
+ opacity: 1; visibility: visible; transform: scale(1);
+}
+
+/* group hint label (anchored on first word, sits ABOVE the page so it never covers text) */
+.wbox.label-anchor.active::before {
+ content: attr(data-grouplabel);
+ position: absolute;
+ top: -22px; left: 0;
+ font-size: 10px; font-weight: 700;
+ background: var(--ups-purple); color: white;
+ padding: 2px 8px;
+ border-radius: 4px 4px 4px 0;
+ white-space: nowrap;
+ box-shadow: var(--shadow-md);
+ z-index: 4;
+ mix-blend-mode: normal;
+}
+.wbox.ok.label-anchor.active::before { background: var(--success); }
+.wbox.warn.label-anchor.active::before { background: var(--warning); }
+.wbox.err.label-anchor.active::before { background: var(--danger); }
+
+/* ============================================================ SOURCE COL (원본 발췌) ============================================================ */
+.source-col {
+ background: white;
+ border-right: 1px solid var(--border-soft);
+ display: flex; flex-direction: column;
+ overflow: hidden;
+}
+.source-canvas {
+ flex: 1;
+ overflow: auto;
+ padding: 14px;
+ scroll-behavior: smooth;
+}
+.source-empty {
+ text-align: center;
+ color: var(--text-tertiary);
+ padding: 40px 20px;
+ font-size: 13px;
+}
+.source-empty .ico { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
+
+.src-doc-card {
+ border: 1px solid var(--border-soft);
+ border-radius: 10px;
+ margin-bottom: 12px;
+ overflow: hidden;
+ box-shadow: var(--shadow-sm);
+}
+.src-doc-card .src-card-head {
+ padding: 10px 12px;
+ background: linear-gradient(180deg, #FAFAFD 0%, #F4F4F8 100%);
+ border-bottom: 1px solid var(--border-soft);
+ display: flex; align-items: center; gap: 8px;
+}
+.src-anchor {
+ font-family: var(--font-mono);
+ font-size: 10.5px; font-weight: 700;
+ background: var(--nh-green-deep); color: white;
+ padding: 2px 7px; border-radius: 4px;
+}
+.src-card-title {
+ flex: 1; font-size: 12.5px; font-weight: 600;
+ color: var(--text-primary);
+}
+.src-card-body { padding: 12px; }
+
+.ie-table {
+ width: 100%; border-collapse: collapse;
+ font-size: 11.5px; margin-bottom: 10px;
+}
+.ie-table th {
+ background: #F3F3F3;
+ font-weight: 700; text-align: center;
+ padding: 6px 8px; border: 1px solid #d4d4d8;
+ font-size: 10.5px;
+ text-transform: uppercase; letter-spacing: 0.3px;
+ color: var(--text-primary);
+}
+.ie-table td {
+ padding: 6px 8px; border: 1px solid #d4d4d8;
+ color: var(--text-primary);
+}
+.ie-table td.num {
+ text-align: right;
+ font-variant-numeric: tabular-nums;
+ font-weight: 600;
+}
+.ie-table td.r-cat {
+ font-weight: 600; background: var(--bg-soft);
+ color: var(--nh-green-deep); font-size: 11px;
+}
+.ie-table .hl-row { background: #FFF6D6 !important; }
+.ie-table .hl-row td { color: #92400E; font-weight: 700; }
+.ie-table .err-row { background: var(--danger-soft) !important; }
+.ie-table .err-row td { color: var(--danger); font-weight: 700; }
+
+.ie-extract {
+ background: linear-gradient(135deg, #F8F4FF, #F1ECFE);
+ border: 1px solid rgba(139, 111, 232, 0.18);
+ border-radius: 8px;
+ padding: 9px 11px;
+ margin-top: 8px;
+}
+.ie-h {
+ font-size: 10px; font-weight: 700;
+ text-transform: uppercase; letter-spacing: 0.4px;
+ color: var(--ups-purple-deep);
+ margin-bottom: 6px;
+ display: flex; align-items: center; gap: 6px;
+}
+.ie-items { display: flex; flex-direction: column; gap: 3px; }
+.ie-item {
+ display: grid; grid-template-columns: 1fr auto auto;
+ gap: 6px; font-size: 11px;
+ padding: 4px 6px;
+ background: white; border-radius: 4px;
+ align-items: center;
+}
+.ie-item .ie-k {
+ font-family: var(--font-mono);
+ font-size: 10px; color: var(--text-secondary);
+}
+.ie-item .ie-v {
+ font-weight: 700; color: var(--text-primary);
+ font-variant-numeric: tabular-nums;
+}
+.conf-pill {
+ display: inline-flex; align-items: center; gap: 4px;
+ background: var(--ups-purple-soft); color: var(--ups-purple-deep);
+ padding: 1px 6px; border-radius: 999px;
+ font-size: 9.5px; font-weight: 700;
+ font-variant-numeric: tabular-nums;
+}
+.conf-pill.high { background: var(--success-soft); color: var(--success); }
+.conf-pill.mid { background: var(--warning-soft); color: var(--warning); }
+.conf-pill.low { background: var(--danger-soft); color: var(--danger); }
+
+.src-quote {
+ font-size: 12.5px; line-height: 1.6;
+ padding: 10px 12px; background: var(--bg-soft);
+ border-left: 3px solid var(--nh-green);
+ border-radius: 0 6px 6px 0;
+ color: var(--text-primary); margin-bottom: 8px;
+}
+.src-raw {
+ font-family: var(--font-mono);
+ font-size: 10.5px;
+ background: #1E293B; color: #E2E8F0;
+ padding: 9px 11px;
+ border-radius: 6px;
+ overflow-x: auto;
+ margin-bottom: 8px;
+ line-height: 1.7;
+}
+.src-raw .hl { background: rgba(252, 211, 77, 0.3); color: #FCD34D; font-weight: 700; padding: 1px 4px; border-radius: 3px; }
+
+.src-callout {
+ background: var(--info-soft);
+ border: 1px solid rgba(37, 99, 235, 0.2);
+ border-radius: 7px;
+ padding: 8px 11px;
+ font-size: 11.5px;
+ color: var(--info);
+ line-height: 1.5;
+ margin-top: 8px;
+}
+.src-callout.warn { background: var(--warning-soft); border-color: rgba(217, 119, 6, 0.25); color: #92400E; }
+.src-callout.err { background: var(--danger-soft); border-color: rgba(220, 38, 38, 0.25); color: var(--danger); }
+
+/* ============================================================ REVIEW PANEL (RIGHT) ============================================================ */
+.review-col {
+ background: var(--bg-soft);
+ display: flex; flex-direction: column;
+ overflow: hidden;
+}
+.review-canvas {
+ flex: 1;
+ overflow-y: auto;
+ padding: 12px;
+}
+
+.review-item {
+ background: white;
+ border: 1px solid var(--border-soft);
+ border-radius: 9px;
+ margin-bottom: 10px;
+ overflow: hidden;
+ cursor: pointer;
+ transition: all 0.18s;
+}
+.review-item.ok { border-left: 4px solid var(--success); }
+.review-item.warn { border-left: 4px solid var(--warning); }
+.review-item.err { border-left: 4px solid var(--danger); }
+.review-item:hover {
+ box-shadow: var(--shadow-md);
+ transform: translateY(-1px);
+}
+.review-item.selected {
+ box-shadow: 0 0 0 2px var(--ups-purple), var(--shadow-md);
+}
+
+.ri-head {
+ padding: 9px 11px;
+ display: flex; align-items: flex-start;
+ justify-content: space-between;
+ gap: 8px;
+ background: var(--bg-soft);
+ border-bottom: 1px solid var(--border-soft);
+}
+.ri-name { font-weight: 600; font-size: 12px; line-height: 1.3; }
+.ri-status {
+ display: inline-flex; align-items: center; gap: 3px;
+ padding: 2px 7px;
+ border-radius: 999px;
+ font-size: 10px; font-weight: 700;
+ flex-shrink: 0;
+}
+.ri-status.ok { background: var(--success-soft); color: var(--success); }
+.ri-status.warn { background: var(--warning-soft); color: var(--warning); }
+.ri-status.err { background: var(--danger-soft); color: var(--danger); }
+
+.ri-body { padding: 10px 11px; }
+
+/* Compact compare view */
+.cmp-mini {
+ display: grid;
+ grid-template-columns: 1fr 22px 1fr;
+ gap: 4px;
+ align-items: stretch;
+ margin-bottom: 8px;
+}
+.cmp-mini .cmp-card {
+ border-radius: 7px;
+ padding: 8px 10px;
+ border: 1.5px solid;
+ font-size: 11.5px;
+}
+.cmp-mini .cmp-card.guide {
+ background: linear-gradient(180deg, #F4F8FE 0%, #EAF1FB 100%);
+ border-color: #BFD4EF;
+}
+.cmp-mini .cmp-card.source {
+ background: linear-gradient(180deg, #F0F9F3 0%, #E2F4EA 100%);
+ border-color: #B5DDC4;
+}
+.cmp-mini .cmp-tag {
+ font-size: 9px; font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.4px;
+ margin-bottom: 4px;
+}
+.cmp-mini .cmp-card.guide .cmp-tag { color: var(--info); }
+.cmp-mini .cmp-card.source .cmp-tag { color: var(--nh-green-deep); }
+.cmp-mini .cmp-val {
+ font-size: 12.5px; font-weight: 700;
+ color: var(--text-primary);
+ font-variant-numeric: tabular-nums;
+ word-break: keep-all;
+}
+.cmp-mini .cmp-arrow {
+ align-self: center;
+ text-align: center;
+ font-size: 13px;
+ font-weight: 700;
+ border-radius: 50%;
+ width: 22px; height: 22px;
+ display: flex; align-items: center; justify-content: center;
+ margin: 0 auto;
+}
+.cmp-mini.match .cmp-arrow { background: var(--success-soft); color: var(--success); }
+.cmp-mini.warn .cmp-arrow { background: var(--warning-soft); color: var(--warning); }
+.cmp-mini.err .cmp-arrow { background: var(--danger-soft); color: var(--danger); }
+
+.ri-rows {
+ width: 100%; border-collapse: collapse;
+ font-size: 11px; margin-bottom: 8px;
+}
+.ri-rows th {
+ background: var(--bg-soft);
+ color: var(--text-tertiary);
+ text-transform: uppercase;
+ font-size: 9.5px;
+ font-weight: 700;
+ padding: 5px 6px;
+ border-bottom: 1px solid var(--border-soft);
+ letter-spacing: 0.3px;
+}
+.ri-rows td {
+ padding: 5px 6px;
+ border-bottom: 1px solid var(--border-soft);
+ font-size: 11px;
+}
+.ri-rows td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.ri-rows td.guide-c { background: #F4F8FE; color: var(--info); }
+.ri-rows td.source-c { background: #F0F9F3; color: var(--nh-green-deep); }
+.ri-rows tr.match-no td { background: var(--danger-soft); color: var(--danger); font-weight: 700; }
+.ri-rows td.mark { text-align: center; font-weight: 700; width: 22px; }
+
+.ri-conf {
+ display: flex; flex-wrap: wrap;
+ gap: 6px;
+ align-items: center;
+ font-size: 10.5px;
+ color: var(--text-tertiary);
+ margin-top: 6px;
+}
+.src-link-btn {
+ display: inline-flex; align-items: center; gap: 4px;
+ background: white;
+ border: 1px solid var(--border-mid);
+ padding: 2px 7px;
+ border-radius: 999px;
+ font-size: 10px;
+ color: var(--text-secondary);
+ cursor: pointer; font-weight: 500;
+ transition: all 0.15s;
+}
+.src-link-btn:hover {
+ border-color: var(--nh-green);
+ color: var(--nh-green-deep);
+ background: var(--nh-green-soft);
+}
+
+.diff-note {
+ background: var(--danger-soft);
+ border-radius: 6px;
+ padding: 7px 9px;
+ font-size: 10.5px;
+ color: var(--danger);
+ display: flex; align-items: flex-start; gap: 5px;
+ margin-top: 6px;
+ line-height: 1.45;
+}
+.diff-note.warn { background: var(--warning-soft); color: #92400E; }
+.diff-note.ok { background: var(--success-soft); color: #065F46; }
+.diff-note .icn { font-weight: 700; flex-shrink: 0; }
+
+.ai-insight {
+ background: linear-gradient(135deg, #F5EFFF, #EDE7FF);
+ border-radius: 7px;
+ padding: 8px 10px;
+ margin-top: 6px;
+ font-size: 10.5px;
+ color: var(--text-secondary);
+ line-height: 1.5;
+}
+.ai-insight .ai-h {
+ font-size: 9.5px; font-weight: 700;
+ color: var(--ups-purple-deep);
+ margin-bottom: 3px;
+ text-transform: uppercase; letter-spacing: 0.4px;
+}
+
+/* ============================================================ SETTINGS MODAL ============================================================ */
+.modal-backdrop {
+ position: fixed; inset: 0;
+ background: rgba(15, 23, 42, 0.4);
+ z-index: 1000;
+ display: none;
+ align-items: center; justify-content: center;
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+ background: white; border-radius: 14px;
+ width: 460px; max-width: 90vw;
+ box-shadow: var(--shadow-lg);
+ overflow: hidden;
+}
+.modal-head {
+ padding: 16px 22px 12px;
+ border-bottom: 1px solid var(--border-soft);
+ display: flex; align-items: center; justify-content: space-between;
+}
+.modal-head h3 { font-size: 16px; font-weight: 700; }
+.modal-close {
+ width: 28px; height: 28px;
+ border-radius: 6px;
+ display: flex; align-items: center; justify-content: center;
+ color: var(--text-tertiary);
+ font-size: 18px;
+}
+.modal-close:hover { background: var(--bg-soft); }
+.modal-body { padding: 16px 22px; }
+.form-field { margin-bottom: 14px; }
+.form-field label {
+ display: block;
+ font-size: 12px; font-weight: 600;
+ color: var(--text-secondary);
+ margin-bottom: 5px;
+}
+.form-field input, .form-field select {
+ width: 100%; padding: 9px 12px;
+ border: 1px solid var(--border-mid);
+ border-radius: 8px;
+ font-size: 13px;
+ background: white;
+ transition: border-color 0.15s;
+ font-family: var(--font-mono);
+}
+.form-field input:focus, .form-field select:focus {
+ outline: none; border-color: var(--nh-green);
+ box-shadow: 0 0 0 3px rgba(0, 168, 90, 0.1);
+}
+.form-field .hint {
+ font-size: 10.5px;
+ color: var(--text-tertiary); margin-top: 4px;
+}
+.mode-toggle {
+ display: flex; gap: 4px;
+ background: var(--bg-soft);
+ padding: 4px; border-radius: 8px;
+}
+.mode-toggle button {
+ flex: 1; padding: 8px 12px;
+ border-radius: 6px; font-size: 12px;
+ font-weight: 600; color: var(--text-secondary);
+}
+.mode-toggle button.active {
+ background: white;
+ color: var(--text-primary);
+ box-shadow: var(--shadow-sm);
+}
+.modal-foot {
+ padding: 12px 22px 16px;
+ display: flex; justify-content: flex-end; gap: 8px;
+}
+.btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.btn-primary { background: var(--nh-green-deep); color: white; }
+.btn-primary:hover { background: var(--nh-green); }
+.btn-secondary { background: var(--bg-soft); color: var(--text-secondary); }
+
+/* Action bar */
+.action-bar {
+ background: white;
+ border-top: 1px solid var(--border-soft);
+ padding: 8px 24px;
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 14px;
+ height: 48px;
+}
+.action-bar .summary {
+ display: flex; align-items: center; gap: 16px;
+ font-size: 11.5px; color: var(--text-secondary);
+}
+.action-bar .summary strong { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.btn-action {
+ padding: 7px 12px; border-radius: 7px;
+ font-size: 12px; font-weight: 600;
+ display: inline-flex; align-items: center; gap: 5px;
+ transition: all 0.15s;
+}
+.btn-action.outline { border: 1px solid var(--border-mid); color: var(--text-secondary); }
+.btn-action.outline:hover { border-color: var(--nh-green); color: var(--nh-green-deep); }
+.btn-action.primary { background: var(--nh-green-deep); color: white; }
+.btn-action.primary:hover { background: var(--nh-green); }
+
+/* ============================================================ TAB NAVIGATION ============================================================ */
+.tab-nav {
+ display: flex;
+ gap: 0;
+ background: white;
+ padding: 0 24px;
+ border-bottom: 1px solid var(--border-soft);
+ align-items: center;
+}
+.tab-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 12px 18px;
+ font-size: 13px;
+ font-weight: 600;
+ color: var(--text-tertiary);
+ border-bottom: 3px solid transparent;
+ margin-bottom: -1px;
+ transition: all 0.15s;
+ position: relative;
+}
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active {
+ color: var(--nh-green-deep);
+ border-bottom-color: var(--nh-green);
+}
+.tab-btn .tab-ico {
+ width: 18px; height: 18px;
+ border-radius: 5px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 11px;
+ font-weight: 700;
+ background: var(--bg-soft);
+ color: var(--text-tertiary);
+}
+.tab-btn.active .tab-ico {
+ background: var(--nh-green);
+ color: white;
+}
+.tab-btn .tab-badge {
+ font-size: 10px;
+ background: var(--bg-soft);
+ color: var(--text-tertiary);
+ padding: 2px 7px;
+ border-radius: 999px;
+ font-weight: 600;
+ margin-left: 4px;
+}
+.tab-btn.active .tab-badge {
+ background: var(--nh-green-soft);
+ color: var(--nh-green-deep);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ============================================================ PARSE TAB LAYOUTS ============================================================ */
+.parse-main {
+ display: grid;
+ grid-template-columns: 280px 1fr;
+ height: calc(100vh - 200px);
+ min-height: 600px;
+ background: var(--bg-page);
+}
+.parse-main.guide-layout {
+ grid-template-columns: 1fr 1fr;
+}
+.parse-sidebar {
+ background: white;
+ border-right: 1px solid var(--border-soft);
+ padding: 16px 14px;
+ overflow-y: auto;
+}
+.parse-doc-card {
+ display: flex; gap: 11px;
+ align-items: flex-start;
+ padding: 12px;
+ border-radius: 10px;
+ border: 1.5px solid var(--border-soft);
+ cursor: pointer;
+ margin-bottom: 8px;
+ transition: all 0.15s;
+ background: white;
+}
+.parse-doc-card:hover {
+ border-color: var(--nh-green);
+ box-shadow: var(--shadow-sm);
+}
+.parse-doc-card.active {
+ border-color: var(--nh-green);
+ background: var(--nh-green-soft);
+ box-shadow: 0 0 0 3px rgba(0, 168, 90, 0.08);
+}
+.parse-doc-card .pdc-ico {
+ width: 40px; height: 50px;
+ border-radius: 6px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 10px; font-weight: 700;
+ color: white;
+ flex-shrink: 0;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.parse-doc-card .pdc-ico.pdf { background: linear-gradient(135deg, #FF5757, #C53030); }
+.parse-doc-card .pdc-ico.hwp { background: linear-gradient(135deg, #4A90E2, #2C5AA0); }
+.parse-doc-card .pdc-ico.txt { background: linear-gradient(135deg, #64748B, #334155); }
+.parse-doc-card .pdc-meta { flex: 1; min-width: 0; }
+.parse-doc-card .pdc-name {
+ font-weight: 700;
+ font-size: 12.5px;
+ color: var(--text-primary);
+ margin-bottom: 3px;
+ line-height: 1.3;
+}
+.parse-doc-card .pdc-sub {
+ font-size: 10.5px;
+ color: var(--text-tertiary);
+ margin-bottom: 6px;
+}
+.parse-doc-card .pdc-stats {
+ display: flex; gap: 8px; flex-wrap: wrap;
+}
+.parse-doc-card .pdc-stat {
+ font-size: 10px;
+ color: var(--text-secondary);
+ background: white;
+ border: 1px solid var(--border-soft);
+ padding: 2px 6px;
+ border-radius: 4px;
+ font-weight: 500;
+}
+.parse-doc-card.active .pdc-stat {
+ border-color: rgba(0, 168, 90, 0.25);
+}
+
+.parse-canvas {
+ overflow-y: auto;
+ padding: 18px 22px;
+ background: var(--bg-page);
+}
+.parse-canvas .parse-head {
+ margin-bottom: 14px;
+}
+.parse-canvas .parse-head h2 {
+ font-size: 18px; font-weight: 700;
+ letter-spacing: -0.4px;
+ margin-bottom: 4px;
+}
+.parse-canvas .parse-head .ph-meta {
+ font-size: 12px; color: var(--text-secondary);
+ display: flex; gap: 14px; align-items: center;
+}
+.parse-canvas .parse-head .ph-meta .badge {
+ font-size: 11px; font-weight: 600;
+ background: var(--ups-purple-soft); color: var(--ups-purple-deep);
+ padding: 2px 8px; border-radius: 999px;
+}
+
+/* Guide preview (Tab 2) */
+.guide-preview {
+ overflow-y: auto;
+ padding: 18px;
+ background: #F1F3F6;
+ border-right: 1px solid var(--border-soft);
+}
+.guide-preview .pdf-page {
+ margin: 0 auto 14px;
+ max-width: 100%;
+}
+
+/* ============================================================
+ UPLOAD ZONE
+ ============================================================ */
+.upload-zone {
+ border: 2px dashed var(--border-mid);
+ border-radius: 10px;
+ padding: 16px 12px;
+ text-align: center;
+ cursor: pointer;
+ transition: all 0.18s;
+ background: var(--bg-soft);
+ margin-bottom: 10px;
+}
+.upload-zone:hover, .upload-zone.dragover {
+ border-color: var(--nh-green);
+ background: var(--nh-green-soft);
+}
+.upload-zone .uz-ico {
+ font-size: 24px;
+ margin-bottom: 6px;
+}
+.upload-zone .uz-text {
+ font-size: 11.5px;
+ font-weight: 600;
+ color: var(--text-secondary);
+ margin-bottom: 3px;
+}
+.upload-zone .uz-sub {
+ font-size: 10px;
+ color: var(--text-tertiary);
+}
+.upload-zone input[type="file"] { display: none; }
+
+.pg-doc-card.uploaded {
+ border-color: var(--ups-purple);
+ background: linear-gradient(135deg, #F8F4FF, #F1ECFE);
+ border-style: solid;
+}
+.pg-doc-card.uploaded.active {
+ border-color: var(--ups-purple-deep);
+ box-shadow: 0 0 0 3px rgba(139, 111, 232, 0.18);
+}
+.pg-doc-card .pg-doc-remove {
+ position: absolute;
+ top: 4px; right: 4px;
+ width: 18px; height: 18px;
+ border-radius: 50%;
+ background: white;
+ border: 1px solid var(--border-mid);
+ color: var(--text-tertiary);
+ display: flex; align-items: center; justify-content: center;
+ font-size: 10px;
+ cursor: pointer;
+ opacity: 0;
+ transition: opacity 0.15s;
+}
+.pg-doc-card:hover .pg-doc-remove { opacity: 1; }
+.pg-doc-card .pg-doc-remove:hover { color: var(--danger); border-color: var(--danger); }
+
+.pg-doc-card.processing .pg-doc-check { animation: pulse 1.2s infinite; }
+
+/* Loading overlay over viewer */
+.pg-loading-overlay {
+ position: absolute;
+ inset: 0;
+ background: rgba(244, 245, 248, 0.92);
+ backdrop-filter: blur(3px);
+ display: none;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 12px;
+ z-index: 100;
+}
+.pg-loading-overlay.show { display: flex; }
+.pg-loading-overlay .spinner {
+ width: 36px; height: 36px;
+ border: 3px solid var(--border-soft);
+ border-top-color: var(--ups-purple);
+ border-radius: 50%;
+ animation: spin 0.8s linear infinite;
+}
+.pg-loading-overlay .lbl { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+.pg-loading-overlay .sub { font-size: 11px; color: var(--text-secondary); }
+
+.pg-viewer { position: relative; }
+
+/* Run Review button */
+.btn-run-review {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--nh-green-deep);
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.15s;
+  cursor: pointer;
+  border: 0;
+}
+.btn-run-review:hover:not(:disabled) { background: var(--nh-green); }
+.btn-run-review:disabled {
+  background: var(--bg-soft);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+.btn-run-review.processing {
+  background: var(--ups-purple-deep);
+  pointer-events: none;
+}
+.run-review-hint {
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.review-empty {
+  text-align: center;
+  padding: 80px 30px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+.review-empty .empty-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.review-empty .empty-steps {
+  margin-top: 20px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 12px;
+}
+.review-empty .empty-step {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+}
+.review-empty .empty-step .step-n {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid var(--border-mid);
+  color: var(--text-tertiary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+}
+.review-empty .empty-step.done .step-n { background: var(--success); color: white; border-color: var(--success); }
+.review-empty .empty-step .step-text { line-height: 1.5; color: var(--text-secondary); }
+
+/* Upload prompt empty state */
+.pg-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.pg-empty .empty-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.pg-empty .empty-desc { line-height: 1.7; }
+.pg-empty .empty-arrow {
+  margin: 16px 0 8px;
+  height: 1px; background: var(--border-mid); width: 60px; margin-left: auto; margin-right: auto;
+}
+.pg-empty-result {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.pg-empty-list {
+  text-align: center;
+  padding: 18px 10px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  background: var(--bg-soft);
+  border: 1px dashed var(--border-mid);
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+ DOCUMENT PARSE PLAYGROUND STYLE
+ ============================================================ */
+.pg-layout {
+ display: grid;
+ grid-template-columns: 220px 1fr 480px;
+ height: calc(100vh - 200px);
+ min-height: 600px;
+ background: #F4F5F8;
+}
+
+/* sidebar */
+.pg-sidebar {
+ background: white;
+ border-right: 1px solid var(--border-soft);
+ padding: 14px 12px;
+ overflow-y: auto;
+}
+.pg-sb-h {
+ font-size: 11px; font-weight: 700;
+ color: var(--text-tertiary);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin: 4px 4px 10px;
+}
+.pg-doc-card {
+ background: white;
+ border: 1.5px solid var(--border-soft);
+ border-radius: 8px;
+ padding: 9px 10px;
+ margin-bottom: 7px;
+ cursor: pointer;
+ transition: all 0.15s;
+ position: relative;
+}
+.pg-doc-card:hover { border-color: var(--nh-green); }
+.pg-doc-card.active {
+ border-color: var(--nh-green);
+ background: var(--nh-green-soft);
+ box-shadow: 0 0 0 3px rgba(0, 168, 90, 0.08);
+}
+.pg-doc-ico {
+ display: inline-flex; align-items: center; gap: 4px;
+ font-size: 9px; font-weight: 700; color: white;
+ padding: 2px 6px;
+ border-radius: 3px;
+ margin-bottom: 4px;
+}
+.pg-doc-ico.pdf { background: #C53030; }
+.pg-doc-ico.hwp { background: #2C5AA0; }
+.pg-doc-ico.txt { background: #334155; }
+.pg-doc-check {
+ display: inline-flex;
+ width: 12px; height: 12px;
+ background: white; color: var(--success);
+ border-radius: 50%;
+ align-items: center; justify-content: center;
+ font-size: 9px;
+}
+.pg-doc-name {
+ font-size: 11.5px; font-weight: 600;
+ color: var(--text-primary);
+ line-height: 1.3;
+ overflow: hidden; text-overflow: ellipsis;
+}
+.pg-doc-sub {
+ font-size: 10px; color: var(--text-tertiary);
+ margin-top: 2px;
+}
+
+/* viewer */
+.pg-viewer {
+ display: flex; flex-direction: column;
+ background: #ECEEF2;
+ border-right: 1px solid var(--border-soft);
+ overflow: hidden;
+}
+.pg-viewer-toolbar {
+ background: white;
+ border-bottom: 1px solid var(--border-soft);
+ padding: 8px 14px;
+ display: flex; align-items: center; justify-content: space-between;
+}
+.pg-vt-left { display: flex; gap: 4px; background: var(--bg-soft); border-radius: 7px; padding: 3px; }
+.pg-btn-tab {
+ padding: 5px 12px;
+ border-radius: 5px;
+ font-size: 12px; font-weight: 600;
+ color: var(--text-secondary);
+ transition: all 0.15s;
+}
+.pg-btn-tab.active {
+ background: white;
+ color: var(--text-primary);
+ box-shadow: var(--shadow-sm);
+}
+.pg-doc-title {
+ font-size: 12.5px; font-weight: 600;
+ color: var(--text-primary);
+}
+.pg-viewer-canvas {
+ flex: 1;
+ overflow-y: auto;
+ padding: 18px 12px;
+ display: flex;
+ justify-content: center;
+}
+
+/* Page with bbox overlay */
+.pg-page {
+ position: relative;
+ background: white;
+ box-shadow: var(--shadow-md);
+ border-radius: 4px;
+ overflow: hidden;
+ max-width: 100%;
+}
+.pg-page img {
+ display: block;
+ width: 100%;
+ height: auto;
+}
+
+/* Paper for text-only (HWP, TXT) */
+.pg-paper {
+ background: white;
+ width: 700px;
+ max-width: 100%;
+ padding: 32px 38px;
+ margin: 0 auto;
+ border-radius: 4px;
+ box-shadow: var(--shadow-md);
+ font-family: 'Pretendard', 'Gothic A1', sans-serif;
+ font-size: 11.5px;
+ line-height: 1.8;
+ color: #1a1a1a;
+ position: relative;
+ min-height: 800px;
+}
+.pg-paper .pp-line {
+ position: relative;
+ padding: 2px 4px;
+ margin: 2px -4px;
+ border-radius: 3px;
+ cursor: pointer;
+}
+.pg-paper .pp-line.heading1 { font-size: 16px; font-weight: 700; margin-top: 12px; }
+.pg-paper .pp-line.heading2 { font-size: 14px; font-weight: 700; margin-top: 8px; color: #2a2a2a; }
+.pg-paper .pp-line.heading3 { font-size: 12.5px; font-weight: 600; }
+.pg-paper .pp-line.table { color: #2563EB; font-family: var(--font-mono); font-size: 11px; background: #F0F7FF; }
+.pg-paper .pp-line.footnote { font-size: 10.5px; color: #666; padding-left: 12px; }
+.pg-paper .pp-line.listitem { padding-left: 14px; }
+.pg-paper .pp-line.caption { font-size: 11px; color: #4A5568; }
+
+/* bbox & idx label */
+.pg-bbox {
+ position: absolute;
+ border: 1.5px solid transparent;
+ border-radius: 3px;
+ pointer-events: auto;
+ transition: all 0.15s;
+}
+.pg-bbox::before {
+ content: attr(data-idx);
+ position: absolute;
+ top: -1px; left: -1px;
+ background: #0EA5E9;
+ color: white;
+ font-size: 9.5px;
+ font-weight: 700;
+ padding: 1px 5px;
+ border-radius: 3px 0 3px 0;
+ font-family: var(--font-mono);
+ line-height: 1.2;
+ min-width: 14px;
+ text-align: center;
+}
+.pg-bbox.show-all {
+ border-color: rgba(14, 165, 233, 0.6);
+ background: rgba(14, 165, 233, 0.04);
+}
+.pg-bbox.hover, .pg-bbox.active {
+ border-color: #0EA5E9;
+ background: rgba(14, 165, 233, 0.14);
+ box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+ z-index: 5;
+}
+
+/* Inline tag for paper-line bbox indicator */
+.pp-tag {
+ display: inline-block;
+ background: #0EA5E9;
+ color: white;
+ font-size: 9px;
+ font-weight: 700;
+ padding: 0px 5px;
+ border-radius: 3px;
+ margin-right: 6px;
+ font-family: var(--font-mono);
+ vertical-align: middle;
+}
+
+.pg-pagination {
+ background: white;
+ border-top: 1px solid var(--border-soft);
+ padding: 8px 14px;
+ display: flex; align-items: center; justify-content: center;
+ gap: 14px;
+}
+.pg-pg-btn {
+ width: 28px; height: 28px;
+ border-radius: 6px;
+ background: var(--bg-soft);
+ color: var(--text-secondary);
+ font-size: 14px;
+ font-weight: 700;
+}
+.pg-pg-btn:hover { background: var(--border-soft); }
+.pg-pg-ind {
+ font-size: 12px; font-weight: 600;
+ color: var(--text-secondary);
+ font-variant-numeric: tabular-nums;
+ min-width: 60px; text-align: center;
+}
+
+/* result */
+.pg-result {
+ background: white;
+ display: flex; flex-direction: column;
+ overflow: hidden;
+}
+.pg-result-head {
+ padding: 12px 16px 8px;
+ font-size: 14px; font-weight: 700;
+ color: var(--text-primary);
+}
+.pg-result-tabs {
+ display: flex;
+ border-bottom: 1px solid var(--border-soft);
+ padding: 0 12px;
+ gap: 0;
+}
+.pg-result-tab {
+ padding: 8px 14px;
+ font-size: 12px; font-weight: 600;
+ color: var(--text-tertiary);
+ border-bottom: 2px solid transparent;
+ margin-bottom: -1px;
+}
+.pg-result-tab.active {
+ color: var(--ups-purple-deep);
+ border-bottom-color: var(--ups-purple);
+}
+.pg-result-body {
+ flex: 1;
+ overflow-y: auto;
+ padding: 14px 16px;
+ font-size: 12px;
+}
+.pg-result-foot {
+ border-top: 1px solid var(--border-soft);
+ padding: 8px 16px;
+ font-size: 10.5px;
+ color: var(--text-tertiary);
+ display: flex; justify-content: flex-end;
+ gap: 6px;
+}
+.pg-result-foot .mono { font-family: var(--font-mono); color: var(--text-secondary); }
+
+/* Element list */
+.pg-elem {
+ padding: 8px 10px;
+ border-radius: 7px;
+ margin-bottom: 6px;
+ cursor: pointer;
+ border: 1px solid transparent;
+ transition: all 0.12s;
+ background: white;
+}
+.pg-elem:hover {
+ background: #F0F9FF;
+ border-color: rgba(14, 165, 233, 0.2);
+}
+.pg-elem.active {
+ background: #E0F2FE;
+ border-color: #0EA5E9;
+ box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.18);
+}
+.pg-elem-head {
+ display: flex; align-items: center; gap: 6px;
+ font-size: 10px;
+ color: var(--text-tertiary);
+ margin-bottom: 3px;
+}
+.pg-elem-idx {
+ display: inline-block;
+ background: #0EA5E9; color: white;
+ padding: 1px 6px;
+ border-radius: 3px;
+ font-size: 10px; font-weight: 700;
+ font-family: var(--font-mono);
+ min-width: 24px; text-align: center;
+}
+.pg-elem-cat {
+ display: inline-block;
+ padding: 1px 7px;
+ border-radius: 3px;
+ font-size: 9.5px; font-weight: 600;
+ font-family: var(--font-mono);
+}
+.pg-elem-cat.heading1 { background: #DBEAFE; color: #1E40AF; }
+.pg-elem-cat.heading2 { background: #FEF3C7; color: #B45309; }
+.pg-elem-cat.heading3 { background: #FCE7F3; color: #9D174D; }
+.pg-elem-cat.paragraph { background: var(--bg-soft); color: var(--text-secondary); }
+.pg-elem-cat.footer, .pg-elem-cat.header { background: #F1F5F9; color: #64748B; }
+.pg-elem-cat.footnote { background: #F5F3FF; color: #6D28D9; }
+.pg-elem-cat.caption { background: #ECFDF5; color: #047857; }
+.pg-elem-cat.listitem { background: #FFEDD5; color: #C2410C; }
+.pg-elem-cat.table, .pg-elem-cat.tablerow { background: #FEE2E2; color: #B91C1C; }
+.pg-elem-cat.tablecell { background: #FECACA; color: #991B1B; }
+.pg-elem-text {
+ font-size: 11.5px;
+ color: var(--text-primary);
+ line-height: 1.5;
+ word-break: break-all;
+}
+.pg-elem.heading1 .pg-elem-text { font-weight: 700; font-size: 13px; }
+.pg-elem.heading2 .pg-elem-text { font-weight: 700; font-size: 12.5px; }
+.pg-elem.tablerow .pg-elem-text { font-family: var(--font-mono); font-size: 10.5px; }
+
+/* HTML view */
+.pg-html-view {
+ font-family: var(--font-mono);
+ font-size: 10.5px;
+ background: #0F172A;
+ color: #E2E8F0;
+ padding: 12px;
+ border-radius: 6px;
+ white-space: pre-wrap;
+ overflow-x: auto;
+ line-height: 1.6;
+ max-height: 100%;
+}
+.pg-html-view .tag { color: #7DD3FC; }
+.pg-html-view .attr { color: #FDE68A; }
+.pg-html-view .text { color: #F1F5F9; }
+
+/* Raw view (for original text-only docs) */
+.pg-raw {
+ background: white;
+ padding: 18px;
+ font-family: var(--font-mono);
+ font-size: 10.5px;
+ line-height: 1.65;
+ color: #1a1a1a;
+ white-space: pre-wrap;
+ max-width: 100%;
+ overflow-x: auto;
+ border-radius: 4px;
+ box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+ ORIGINAL DOC VIEW (paper-style for HWP·TXT)
+ ============================================================ */
+.parse-main.three-col {
+ grid-template-columns: 240px 1fr 1fr;
+}
+
+.col-subhead {
+ background: white;
+ border-bottom: 1px solid var(--border-soft);
+ padding: 9px 14px;
+ display: flex; align-items: center; justify-content: space-between;
+ font-size: 12px;
+ position: sticky; top: 0; z-index: 5;
+}
+.col-subhead .csh-tag {
+ display: inline-flex; align-items: center; gap: 6px;
+ padding: 3px 9px;
+ border-radius: 4px;
+ font-size: 10.5px;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.4px;
+}
+.col-subhead.original .csh-tag { background: #FEF3E2; color: #B45309; }
+.col-subhead.parsed .csh-tag { background: var(--ups-purple-soft); color: var(--ups-purple-deep); }
+.col-subhead .csh-meta { font-size: 10.5px; color: var(--text-tertiary); font-weight: 500; }
+
+.original-view {
+ background: #F1F3F6;
+ overflow-y: auto;
+ padding: 16px;
+ border-right: 1px solid var(--border-soft);
+}
+
+/* Paper-style HWP-like document */
+.paper {
+ background: white;
+ max-width: 700px;
+ margin: 0 auto 14px;
+ padding: 32px 38px;
+ border-radius: 6px;
+ box-shadow: var(--shadow-md);
+ font-family: 'Pretendard', 'Gothic A1', sans-serif;
+ font-size: 12px;
+ line-height: 1.7;
+ color: #1a1a1a;
+ position: relative;
+}
+.paper::before {
+ content: attr(data-pagelabel);
+ position: absolute;
+ top: 8px; right: 12px;
+ font-size: 9.5px;
+ color: var(--text-tertiary);
+ font-family: var(--font-mono);
+}
+.paper .ph1 {
+ font-size: 17px;
+ font-weight: 800;
+ text-align: center;
+ margin-bottom: 18px;
+ letter-spacing: -0.5px;
+}
+.paper .ph2 {
+ font-size: 13.5px;
+ font-weight: 700;
+ margin: 16px 0 8px;
+ padding-bottom: 4px;
+ border-bottom: 1.5px solid #1a1a1a;
+}
+.paper .ph3 {
+ font-size: 12.5px;
+ font-weight: 700;
+ margin: 12px 0 6px;
+ color: #2a2a2a;
+}
+.paper p { margin-bottom: 8px; text-align: justify; text-justify: inter-character; }
+.paper .indent { padding-left: 14px; }
+.paper .quote-block {
+ background: #F7F7F2;
+ border-left: 3px solid #999;
+ padding: 8px 12px;
+ margin: 8px 0;
+ font-size: 11.5px;
+}
+.paper table.htbl {
+ width: 100%;
+ border-collapse: collapse;
+ margin: 8px 0;
+ font-size: 11.5px;
+}
+.paper table.htbl th, .paper table.htbl td {
+ border: 1px solid #555;
+ padding: 5px 8px;
+}
+.paper table.htbl th {
+ background: #EFEFEF;
+ font-weight: 700;
+ text-align: center;
+}
+.paper table.htbl td.num {
+ text-align: right;
+ font-variant-numeric: tabular-nums;
+}
+.paper table.htbl td.cat {
+ background: #F7F7F7;
+ font-weight: 600;
+ text-align: center;
+}
+.paper .footer-line {
+ font-size: 10.5px;
+ color: #999;
+ text-align: right;
+ margin-top: 20px;
+ padding-top: 8px;
+ border-top: 1px dashed #ccc;
+}
+
+/* Highlight (linked to parsed IE field) */
+.paper .ohl {
+ background: rgba(252, 211, 77, 0.4);
+ padding: 1px 3px;
+ border-radius: 2px;
+ cursor: pointer;
+}
+.paper .ohl.err { background: rgba(252, 165, 165, 0.55); }
+
+/* PV table raw view */
+.raw-file {
+ background: #0F172A;
+ color: #E2E8F0;
+ border-radius: 8px;
+ padding: 14px 16px;
+ font-family: var(--font-mono);
+ font-size: 10.5px;
+ line-height: 1.7;
+ overflow-x: auto;
+ margin-bottom: 14px;
+ max-width: 700px;
+ margin-left: auto; margin-right: auto;
+ box-shadow: var(--shadow-md);
+ position: relative;
+}
+.raw-file::before {
+ content: attr(data-filename);
+ position: absolute;
+ top: -8px; left: 14px;
+ background: #475569;
+ color: white;
+ padding: 2px 9px;
+ border-radius: 4px;
+ font-size: 9.5px;
+ font-weight: 600;
+}
+.raw-file .ln {
+ display: inline-block;
+ width: 32px;
+ color: #64748B;
+ user-select: none;
+ text-align: right;
+ margin-right: 12px;
+}
+.raw-file .row { display: block; }
+.raw-file .row.hl { background: rgba(252, 211, 77, 0.18); border-radius: 2px; }
+.raw-file .row.err-hl { background: rgba(220, 38, 38, 0.22); }
+.raw-file .v { color: #FCD34D; font-weight: 700; }
+.raw-file .v.err { color: #FCA5A5; }
+.raw-file .comment { color: #94A3B8; font-style: italic; }
+
+/* Make parse-canvas inside 3-col tab a bit denser */
+.three-col .parse-canvas {
+ padding: 0;
+}
+.three-col .original-view {
+ padding: 0;
+}
+.three-col .parse-canvas-inner {
+ padding: 16px 20px;
+}
+.three-col .original-view-inner {
+ padding: 16px;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+</style>
+</head>
+<body>
+
+<div class="upstage-gradient-bar"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+<div class="brand">
+<div class="nh-logo">NH</div>
+<div class="brand-text">
+<div class="name">NH농협생명</div>
+<div class="sub">상품관리 · 안내장 검수 시스템</div>
+</div>
+<div class="brand-sep">×</div>
+<div class="upstage-mark">
+<div class="dot"></div>
+ Powered by Upstage Document Parse · IE · Solar LLM
+</div>
+</div>
+<div class="topbar-right">
+<div class="meta">sooji.oh@upstage.ai · 2026.05.28</div>
+<button class="btn-settings" onclick="openSettings()">
+<span style="font-size:13px;"></span>API 설정
+</button>
+</div>
+</div>
+
+<!-- PAGE HEADER + WORKFLOW -->
+<div class="page-head">
+<div class="page-title-row">
+<div class="page-title">
+<h1>안내장 자동 검수 — 백세팔팔NH건강보험</h1>
+<div class="desc">
+<strong>안내장(검수대상)</strong>의 워드 단위 bbox와<strong>기초서류·PV테이블(원본)</strong>의 발췌·추출값을 한 화면에서 병렬 비교합니다.
+ 모든 추론은 Upstage Document Parse(워드 단위 layout) · Information Extraction · Solar LLM 기반입니다.
+</div>
+</div>
+<div class="product-chip">
+<span class="pulse"></span>
+ I3050509 · 2506 개정 · 1종(갱신형)
+</div>
+</div>
+
+<div class="workflow">
+<div class="workflow-step done">
+<div class="step-num"><span>1</span></div>
+<div class="step-label">Document Parse<div class="sub">PDF·HWP·TXT → 워드 layout</div></div>
+</div>
+<div class="workflow-step done">
+<div class="step-num"><span>2</span></div>
+<div class="step-label">Information Extraction<div class="sub">스키마 기반 항목 추출</div></div>
+</div>
+<div class="workflow-step done">
+<div class="step-num"><span>3</span></div>
+<div class="step-label">Solar LLM 대조<div class="sub">정합성·의미 비교</div></div>
+</div>
+<div class="workflow-step active">
+<div class="step-num"><span>4</span></div>
+<div class="step-label">검수 리포트<div class="sub">21 OK · 2 경고 · 1 불일치</div></div>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ TAB NAVIGATION ============================================================ -->
+<div class="tab-nav">
+<button class="tab-btn" data-tab="source-parse" onclick="switchTab('source-parse', this)">
+<span class="tab-ico"></span>
+ 원본 문서 파싱 결과
+<span class="tab-badge">3</span>
+</button>
+<button class="tab-btn" data-tab="guide-parse" onclick="switchTab('guide-parse', this)">
+<span class="tab-ico"></span>
+ 안내장 파싱 결과
+<span class="tab-badge">9p</span>
+</button>
+<button class="tab-btn active" data-tab="review" onclick="switchTab('review', this)">
+<span class="tab-ico"></span>
+ 비교 및 검수 결과
+<span class="tab-badge">24</span>
+</button>
+</div>
+
+<!-- ============================================================ TAB 1: 원본 문서 — Document Parse Playground 스타일 ============================================================ -->
+<div class="tab-panel" data-tab="source-parse">
+<div class="pg-layout">
+<aside class="pg-sidebar">
+<div class="upload-zone" onclick="document.getElementById('upload-source').click()"
+ ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'source-parse')">
+<div class="uz-ico"></div>
+<div class="uz-text">원본 문서 업로드</div>
+<div class="uz-sub">PDF · HWP · TXT · 클릭 또는 드래그</div>
+<input type="file" id="upload-source" accept=".pdf,.hwp,.txt" multiple onchange="handleUpload(event, 'source-parse')">
+</div>
+<div class="pg-sb-h">업로드된 문서</div>
+<div id="pgSrcDocList">
+<div class="pg-empty-list">업로드한 원본 문서가 여기에 표시됩니다</div>
+</div>
+</aside>
+
+<section class="pg-viewer">
+<div class="pg-viewer-toolbar">
+<div class="pg-vt-left">
+<button class="pg-btn-tab active" data-vtype="visual" onclick="setViewType('source-parse','visual',this)">상세</button>
+<button class="pg-btn-tab" data-vtype="raw" onclick="setViewType('source-parse','raw',this)">원문</button>
+</div>
+<div class="pg-vt-right">
+<span class="pg-doc-title" id="pgSrcDocTitle">백세팔팔NH건강보험 약관</span>
+</div>
+</div>
+<div class="pg-viewer-canvas" id="pgSrcViewer"></div>
+<div class="pg-loading-overlay" id="pgSrcLoading">
+<div class="spinner"></div>
+<div class="lbl">Upstage Document Parse 호출 중...</div>
+<div class="sub">파일을 분석하고 layout + element를 추출합니다</div>
+</div>
+<div class="pg-pagination">
+<button class="pg-pg-btn" onclick="pgChangePage('source-parse',-1)">‹</button>
+<span class="pg-pg-ind" id="pgSrcPageInd">1 / 5</span>
+<button class="pg-pg-btn" onclick="pgChangePage('source-parse',1)">›</button>
+</div>
+</section>
+
+<aside class="pg-result">
+<div class="pg-result-head">결과</div>
+<div class="pg-result-tabs">
+<button class="pg-result-tab active" data-rt="preview" onclick="setResultType('source-parse','preview',this)">Preview</button>
+<button class="pg-result-tab" data-rt="html" onclick="setResultType('source-parse','html',this)">HTML</button>
+<button class="pg-result-tab" data-rt="json" onclick="setResultType('source-parse','json',this)">JSON</button>
+</div>
+<div class="pg-result-body" id="pgSrcResult"></div>
+<div class="pg-result-foot">Job ID:<span class="mono">job_a8f3kpJqL2nMrVtY9wB</span></div>
+</aside>
+</div>
+</div>
+
+<!-- ============================================================ TAB 2: 안내장 — Document Parse Playground 스타일 ============================================================ -->
+<div class="tab-panel" data-tab="guide-parse">
+<div class="pg-layout">
+<aside class="pg-sidebar">
+<div class="upload-zone" onclick="document.getElementById('upload-guide').click()"
+ ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'guide-parse')">
+<div class="uz-ico"></div>
+<div class="uz-text">검수 대상 안내장 업로드</div>
+<div class="uz-sub">PDF · 클릭 또는 드래그</div>
+<input type="file" id="upload-guide" accept=".pdf" onchange="handleUpload(event, 'guide-parse')">
+</div>
+<div class="pg-sb-h">업로드된 문서</div>
+<div id="pgGuideDocList">
+<div class="pg-empty-list">업로드한 안내장이 여기에 표시됩니다</div>
+</div>
+</aside>
+
+<section class="pg-viewer">
+<div class="pg-viewer-toolbar">
+<div class="pg-vt-left">
+<button class="pg-btn-tab active" data-vtype="visual" onclick="setViewType('guide-parse','visual',this)">상세</button>
+<button class="pg-btn-tab" data-vtype="raw" onclick="setViewType('guide-parse','raw',this)">원문</button>
+</div>
+<div class="pg-vt-right">
+<span class="pg-doc-title">백세팔팔NH건강보험 안내장</span>
+</div>
+</div>
+<div class="pg-viewer-canvas" id="pgGuideViewer"></div>
+<div class="pg-loading-overlay" id="pgGuideLoading">
+<div class="spinner"></div>
+<div class="lbl">Upstage Document Parse 호출 중...</div>
+<div class="sub">파일을 분석하고 layout + element를 추출합니다</div>
+</div>
+<div class="pg-pagination">
+<button class="pg-pg-btn" onclick="pgChangePage('guide-parse',-1)">‹</button>
+<span class="pg-pg-ind" id="pgGuidePageInd">1 / 9</span>
+<button class="pg-pg-btn" onclick="pgChangePage('guide-parse',1)">›</button>
+</div>
+</section>
+
+<aside class="pg-result">
+<div class="pg-result-head">결과</div>
+<div class="pg-result-tabs">
+<button class="pg-result-tab active" data-rt="preview" onclick="setResultType('guide-parse','preview',this)">Preview</button>
+<button class="pg-result-tab" data-rt="html" onclick="setResultType('guide-parse','html',this)">HTML</button>
+<button class="pg-result-tab" data-rt="json" onclick="setResultType('guide-parse','json',this)">JSON</button>
+</div>
+<div class="pg-result-body" id="pgGuideResult"></div>
+<div class="pg-result-foot">Job ID:<span class="mono">job_csjnvpyTmGAgaWUkFwiGof</span></div>
+</aside>
+</div>
+</div>
+
+<!-- ============================================================ TAB 3: 비교 및 검수 결과 (현재 4-column) ============================================================ -->
+<div class="tab-panel active" data-tab="review">
+<!-- MAIN 4-COLUMN LAYOUT -->
+<div class="main">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+<div class="sidebar-section">
+<div class="sidebar-h">검수 대상 (안내장)</div>
+<div id="tab3GuideDocList">
+<div class="pg-empty-list">안내장 파싱 결과 탭에서 업로드한 안내장이 여기에 표시됩니다</div>
+</div>
+</div>
+
+<div class="sidebar-section">
+<div class="sidebar-h">원본 (Ground Truth)</div>
+<div id="tab3SourceDocList">
+<div class="pg-empty-list">원본 문서 파싱 결과 탭에서 업로드한 원본 문서가 여기에 표시됩니다</div>
+</div>
+</div>
+
+<div class="sidebar-section">
+<div class="sidebar-h">검수 카테고리</div>
+<nav class="cat-nav" id="reviewCatNav">
+<button class="cat-item active" data-cat="coverage" onclick="switchCategory('coverage', this)">
+<span class="cat-label">보장내용·그림</span>
+<span class="cat-status pending" data-cat-status="coverage"></span>
+</button>
+<button class="cat-item" data-cat="rider" onclick="switchCategory('rider', this)">
+<span class="cat-label">선택특약·급부</span>
+<span class="cat-status pending" data-cat-status="rider"></span>
+</button>
+<button class="cat-item" data-cat="eligibility" onclick="switchCategory('eligibility', this)">
+<span class="cat-label">가입나이·납입</span>
+<span class="cat-status pending" data-cat-status="eligibility"></span>
+</button>
+<button class="cat-item" data-cat="premium" onclick="switchCategory('premium', this)">
+<span class="cat-label">보험료·해약환급</span>
+<span class="cat-status pending" data-cat-status="premium"></span>
+</button>
+</nav>
+</div>
+
+<div class="sidebar-section">
+<div class="sidebar-h">검수 통계</div>
+<div class="stat-grid">
+<div class="stat ok"><div class="num" id="statOk">0</div><div class="lbl">일치</div></div>
+<div class="stat warn"><div class="num" id="statWarn">0</div><div class="lbl">경고</div></div>
+<div class="stat err"><div class="num" id="statErr">0</div><div class="lbl">불일치</div></div>
+<div class="stat"><div class="num" id="statTotal">0</div><div class="lbl">총 항목</div></div>
+</div>
+</div>
+
+<div class="sidebar-section">
+<button class="btn-run-review" id="runReviewBtn" onclick="runReview()">검수 실행</button>
+<div class="run-review-hint" id="runReviewHint">안내장 1개 + 원본 1개 이상 업로드 후 실행</div>
+</div>
+</aside>
+
+<!-- ===== GUIDE COL ===== -->
+<section class="guide-col">
+<div class="col-head guide">
+<div style="display:flex; align-items:center; gap:8px;">
+<span class="col-tag">검수 대상</span>
+<span class="col-title">백세팔팔NH건강보험 안내장</span>
+</div>
+<div class="col-meta" id="guideMeta">p.2 (보장그림)</div>
+</div>
+<div class="guide-canvas" id="guideCanvas">
+<div class="source-empty" style="padding:60px 20px;">
+  <div style="font-weight:600; color:var(--text-secondary); margin-bottom:8px;">안내장 미리보기</div>
+  <div style="font-size:12px; line-height:1.6;">[안내장 파싱 결과] 탭에서 안내장 PDF를 업로드하면<br>여기에 페이지 미리보기가 표시됩니다.</div>
+</div>
+</div>
+</section>
+
+<!-- ===== SOURCE COL ===== -->
+<section class="source-col">
+<div class="col-head source">
+<div style="display:flex; align-items:center; gap:8px;">
+<span class="col-tag">원본 (Ground Truth)</span>
+<span class="col-title" id="sourceTitle">선택된 검수 항목 없음</span>
+</div>
+<div class="col-meta" id="sourceMeta">—</div>
+</div>
+<div class="source-canvas" id="sourceCanvas">
+<div class="source-empty">
+<div class="ico"></div>
+<div>우측 검수 결과에서 항목을 클릭하면<br>해당 원본 문서의 발췌·IE 결과·confidence가 표시됩니다.</div>
+</div>
+</div>
+</section>
+
+<!-- ===== REVIEW COL ===== -->
+<aside class="review-col">
+<div class="col-head" style="background: var(--bg-soft);">
+<div style="display:flex; align-items:center; gap:8px;">
+<span class="col-tag" style="background: var(--ups-purple-soft); color: var(--ups-purple-deep);">검수 결과</span>
+<span class="col-title" id="reviewTitle">보장내용·그림</span>
+</div>
+<div class="col-meta" id="reviewMeta">4 / 24</div>
+</div>
+<div class="review-canvas" id="reviewCanvas"></div>
+</aside>
+
+</div>
+</div><!-- /tab-panel review -->
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+<div class="summary">
+<div>검수<strong>100%</strong>(24/24)</div>
+<div>일치<strong style="color: var(--success);">21</strong></div>
+<div>경고<strong style="color: var(--warning);">2</strong></div>
+<div>불일치<strong style="color: var(--danger);">1</strong></div>
+<div>API<strong>7회</strong>· 처리<strong>14.2초</strong></div>
+</div>
+<div style="display:flex; gap:8px;">
+<button class="btn-action outline" onclick="runRealApi()">실제 API 재호출</button>
+<button class="btn-action primary">검수 리포트 발행 →</button>
+</div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settingsModal">
+<div class="modal">
+<div class="modal-head">
+<h3>Upstage API 설정</h3>
+<button class="modal-close" onclick="closeSettings()"></button>
+</div>
+<div class="modal-body">
+<div class="form-field">
+<label>실행 모드</label>
+<div class="mode-toggle">
+<button class="active" id="modeMock" onclick="setMode('mock')">Mock 응답</button>
+<button id="modeReal" onclick="setMode('real')">실제 API 호출</button>
+</div>
+<div class="hint">데모용 mock 응답으로 즉시 시연하거나, 실제 Upstage API 키로 호출할 수 있습니다.</div>
+</div>
+<div class="form-field">
+<label>API Key</label>
+<input type="password" id="apiKey" placeholder="up_xxxxxxxxxxxxxxxx" value="">
+<div class="hint">키는 브라우저 세션에만 저장됩니다.</div>
+</div>
+<div class="form-field">
+<label>Endpoint</label>
+<select id="apiEndpoint">
+<option value="document-parse">Document Parse (워드 layout)</option>
+<option value="information-extract">Information Extract</option>
+<option value="solar-chat">Solar LLM (대조 판정)</option>
+</select>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-secondary" onclick="closeSettings()">취소</button>
+<button class="btn btn-primary" onclick="saveSettings()">저장</button>
+</div>
+</div>
+</div>
+
+<script>
+// ============================================================
+// WORD-LEVEL BBOX DATA (extracted via Upstage Document Parse equivalent)
+// ============================================================
+const BBOX_DATA = {"cov-1":{"pdf_page":2,"label":"수술자금 최대 2,000만원","words":[{"text":"수술자금","left":59.967,"top":10.295,"width":6.575,"height":2.471},{"text":"최대","left":67.018,"top":10.295,"width":3.295,"height":2.471},{"text":"2,000만원!","left":70.789,"top":10.295,"width":8.929,"height":2.471}]},"cov-2":{"pdf_page":2,"label":"관혈수술시 4대질병 보장금액","words":[{"text":"관혈","left":55.847,"top":17.923,"width":2.665,"height":2.196},{"text":"수술시","left":58.897,"top":17.923,"width":4.004,"height":2.196},{"text":"뇌혈관","left":66.883,"top":21.41,"width":1.972,"height":1.373},{"text":"심질환","left":70.187,"top":21.41,"width":1.972,"height":1.373}]},"cov-3":{"pdf_page":2,"label":"비관혈수술시 4대질병 보장금액","words":[{"text":"비관혈","left":76.05,"top":17.923,"width":3.992,"height":2.196},{"text":"수술시","left":80.427,"top":17.923,"width":4.004,"height":2.196},{"text":"뇌혈관","left":87.796,"top":21.41,"width":1.972,"height":1.373},{"text":"심질환","left":91.1,"top":21.41,"width":1.972,"height":1.373}]},"cov-4":{"pdf_page":2,"label":"면책 · 1년 미만 50% 지급","words":[{"text":"1년","left":89.23,"top":38.766,"width":0.78,"height":1.098},{"text":"1년","left":68.669,"top":38.768,"width":0.78,"height":1.098},{"text":"1년","left":89.23,"top":26.585,"width":0.78,"height":1.098},{"text":"1년","left":68.669,"top":26.585,"width":0.78,"height":1.098},{"text":"미만","left":90.177,"top":38.766,"width":1.104,"height":1.098},{"text":"미만","left":69.616,"top":38.768,"width":1.104,"height":1.098},{"text":"미만","left":90.177,"top":26.585,"width":1.104,"height":1.098},{"text":"미만","left":69.616,"top":26.585,"width":1.104,"height":1.098},{"text":"50%","left":91.449,"top":38.766,"width":1.248,"height":1.098},{"text":"50%","left":70.887,"top":38.768,"width":1.248,"height":1.098},{"text":"50%","left":91.449,"top":26.585,"width":1.248,"height":1.098},{"text":"50%","left":70.887,"top":26.585,"width":1.248,"height":1.098},{"text":"지급)","left":92.865,"top":38.766,"width":1.306,"height":1.098},{"text":"지급)","left":72.303,"top":38.768,"width":1.306,"height":1.098},{"text":"지급)","left":92.865,"top":26.585,"width":1.306,"height":1.098},{"text":"지급)","left":72.303,"top":26.585,"width":1.306,"height":1.098}]},"elig-1":{"pdf_page":4,"label":"주계약 1종(갱신형) 가입나이","words":[{"text":"20세","left":16.262,"top":18.064,"width":1.898,"height":1.373},{"text":"~","left":18.407,"top":18.064,"width":0.5,"height":1.373},{"text":"~","left":29.61,"top":18.064,"width":0.5,"height":1.373},{"text":"최대","left":19.154,"top":18.064,"width":1.623,"height":1.373},{"text":"최대","left":30.357,"top":18.064,"width":1.623,"height":1.373},{"text":"80세","left":21.024,"top":18.064,"width":1.942,"height":1.373},{"text":"만","left":26.691,"top":18.064,"width":0.812,"height":1.373},{"text":"15세","left":27.749,"top":18.064,"width":1.615,"height":1.373},{"text":"70세","left":32.227,"top":18.064,"width":1.852,"height":1.373}]},"elig-2":{"pdf_page":4,"label":"보험료 납입주기","words":[{"text":"월납,","left":38.541,"top":19.576,"width":1.835,"height":1.373},{"text":"3개월납,","left":40.623,"top":19.576,"width":3.15,"height":1.373},{"text":"6개월납,","left":38.638,"top":21.223,"width":3.167,"height":1.373},{"text":"연납","left":42.051,"top":21.223,"width":1.623,"height":1.373}]},"elig-3":{"pdf_page":4,"label":"보험기간 · 납입기간","words":[{"text":"20년","left":36.411,"top":34.58,"width":1.787,"height":1.373},{"text":"100세","left":36.218,"top":40.656,"width":2.172,"height":1.373},{"text":"만기","left":38.365,"top":34.58,"width":1.554,"height":1.373},{"text":"만기","left":38.559,"top":40.656,"width":1.554,"height":1.373},{"text":"만기","left":37.388,"top":47.654,"width":1.554,"height":1.373},{"text":"10/15년/","left":42.316,"top":34.58,"width":2.882,"height":1.373},{"text":"10/15/","left":42.696,"top":39.729,"width":2.123,"height":1.373},{"text":"10/15/","left":42.695,"top":45.801,"width":2.123,"height":1.373},{"text":"전기납","left":42.601,"top":36.433,"width":2.312,"height":1.373},{"text":"20/30년납","left":41.862,"top":41.582,"width":3.792,"height":1.373},{"text":"20/30년납","left":41.861,"top":47.654,"width":3.792,"height":1.373}]},"rider-1":{"pdf_page":7,"label":"플러스뇌혈관질환 통원특약","words":[{"text":"플러스뇌혈관질환","left":4.871,"top":20.128,"width":6.202,"height":1.373},{"text":"통원특약","left":6.415,"top":21.775,"width":3.112,"height":1.373},{"text":"뇌혈관질환","left":13.663,"top":18.478,"width":4.058,"height":1.373},{"text":"뇌혈관질환","left":13.663,"top":24.249,"width":4.058,"height":1.373},{"text":"통원급여금","left":13.663,"top":20.125,"width":4.058,"height":1.373},{"text":"통원급여금","left":13.663,"top":25.896,"width":4.058,"height":1.373},{"text":"10","left":43.334,"top":17.931,"width":1.255,"height":1.784},{"text":"2","left":43.903,"top":24.526,"width":0.687,"height":1.784},{"text":"만원","left":44.846,"top":17.852,"width":1.431,"height":1.277},{"text":"만원","left":44.846,"top":24.447,"width":1.431,"height":1.277}]},"rider-2":{"pdf_page":7,"label":"플러스허혈성심질환 통원특약","words":[{"text":"플러스허혈성심질환","left":4.485,"top":33.318,"width":6.974,"height":1.373},{"text":"통원특약","left":6.415,"top":34.965,"width":3.112,"height":1.373},{"text":"허혈성심질환","left":13.257,"top":31.667,"width":4.869,"height":1.373},{"text":"허혈성심질환","left":13.257,"top":37.439,"width":4.869,"height":1.373},{"text":"통원급여금","left":13.663,"top":33.315,"width":4.058,"height":1.373},{"text":"통원급여금","left":13.663,"top":39.086,"width":4.058,"height":1.373}]},"rider-3":{"pdf_page":7,"label":"플러스수술동반 입원특약","words":[{"text":"플러스수술동반","left":5.257,"top":46.507,"width":5.429,"height":1.373},{"text":"입원특약","left":6.415,"top":48.154,"width":3.112,"height":1.373},{"text":"입원특약","left":6.415,"top":61.344,"width":3.112,"height":1.373},{"text":"4대주요질병","left":13.402,"top":50.628,"width":4.579,"height":1.373}]},"prem-1":{"pdf_page":8,"label":"주계약 1형 간편가입형 보험료 (30·40·50세)","words":[{"text":"5,600원","left":22.416,"top":21.71,"width":2.57,"height":1.098},{"text":"9,800원","left":26.671,"top":21.71,"width":2.57,"height":1.098},{"text":"16,500원","left":30.503,"top":21.71,"width":2.993,"height":1.098},{"text":"17,000원","left":21.993,"top":23.355,"width":2.993,"height":1.098},{"text":"21,200원","left":26.248,"top":23.355,"width":2.993,"height":1.098},{"text":"27,800원","left":30.503,"top":23.355,"width":2.993,"height":1.098},{"text":"31,900원","left":21.993,"top":24.989,"width":2.993,"height":1.098},{"text":"37,600원","left":26.248,"top":24.989,"width":2.993,"height":1.098},{"text":"43,100원","left":30.503,"top":24.989,"width":2.993,"height":1.098},{"text":"40,400원","left":21.993,"top":26.623,"width":2.993,"height":1.098},{"text":"48,700원","left":26.248,"top":26.623,"width":2.993,"height":1.098},{"text":"57,300원","left":30.503,"top":26.623,"width":2.993,"height":1.098}]},"prem-2":{"pdf_page":8,"label":"주계약 2형 일반가입형 보험료 (30·40·50세)","words":[{"text":"4,500원","left":35.181,"top":21.71,"width":2.57,"height":1.098},{"text":"7,300원","left":39.436,"top":21.71,"width":2.57,"height":1.098},{"text":"12,100원","left":43.283,"top":21.71,"width":2.993,"height":1.098},{"text":"15,800원","left":34.759,"top":23.355,"width":2.993,"height":1.098},{"text":"18,700원","left":39.014,"top":23.355,"width":2.993,"height":1.098},{"text":"18,700원","left":39.014,"top":42.965,"width":2.993,"height":1.098},{"text":"23,400원","left":43.283,"top":23.355,"width":2.993,"height":1.098},{"text":"24,700원","left":34.759,"top":24.989,"width":2.993,"height":1.098},{"text":"29,100원","left":39.014,"top":24.989,"width":2.993,"height":1.098},{"text":"29,100원","left":30.503,"top":82.186,"width":2.993,"height":1.098},{"text":"33,300원","left":43.283,"top":24.989,"width":2.993,"height":1.098},{"text":"33,300원","left":34.759,"top":26.623,"width":2.993,"height":1.098}]},"prem-2b":{"pdf_page":8,"label":" 40,100원 (PV테이블 47,500원과 불일치)","words":[{"text":"40,100원","left":39.014,"top":26.623,"width":2.993,"height":1.098},{"text":"47,500원","left":43.283,"top":26.623,"width":2.993,"height":1.098}]},"prem-3":{"pdf_page":8,"label":"진단특약 보험료","words":[{"text":"260원","left":23.064,"top":31.526,"width":1.922,"height":1.098},{"text":"300원","left":27.319,"top":31.526,"width":1.922,"height":1.098},{"text":"440원","left":31.574,"top":31.526,"width":1.922,"height":1.098},{"text":"200원","left":35.829,"top":31.526,"width":1.922,"height":1.098},{"text":"1,100원","left":22.416,"top":33.16,"width":2.57,"height":1.098},{"text":"1,240원","left":26.671,"top":33.16,"width":2.57,"height":1.098},{"text":"1,400원","left":30.926,"top":33.16,"width":2.57,"height":1.098}]}};
+
+// ============================================================
+// SOURCE DOCUMENT EXCERPTS (mapped per review item)
+// ============================================================
+const SOURCE_DATA = {
+ // === Coverage / Yakkwan ===
+ 'cov-1': {
+ title: '약관 §27 [별표3] 수술자금 급부표',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p · Document Parse OK',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§27 [별표3]</span>
+<span class="src-card-title">수술자금 최대 한도</span>
+<span class="conf-pill high">conf 97%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">
+ 주계약 가입금액<b>1,000만원</b>기준으로 4대 주요질병 수술 시 수술자금<b>최대 2,000만원</b>(관혈수술 기준)을 지급한다.
+</div>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">surgery.max_payout</span><span class="ie-v">20,000,000 KRW</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">base_amount</span><span class="ie-v">10,000,000 KRW</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'cov-2': {
+ title: '약관 §27.2 관혈수술 급부표',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p · Document Parse OK',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§27.2</span>
+<span class="src-card-title">관혈수술 급부표</span>
+<span class="conf-pill high">conf 96%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>4대질병</th><th>지급금액</th><th>지급조건</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">뇌혈관·심질환</td><td class="num">2,000만원</td><td>수술 1회당 / 1년 미만 50%</td></tr>
+<tr><td class="r-cat">간·췌장·폐질환</td><td class="num">1,000만원</td><td>수술 1회당 / 1년 미만 50%</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">surgery.open.major</span><span class="ie-v">20,000,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.open.minor</span><span class="ie-v">10,000,000</span><span class="conf-pill high">97%</span></div>
+<div class="ie-item"><span class="ie-k">limit.first_year_pct</span><span class="ie-v">50%</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'cov-3': {
+ title: '약관 §27.3 비관혈수술 급부표',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p · Document Parse OK',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§27.3</span>
+<span class="src-card-title">비관혈수술 급부표</span>
+<span class="conf-pill high">conf 95%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>4대질병</th><th>지급금액</th><th>지급조건</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">뇌혈관·심질환</td><td class="num">1,000만원</td><td>연간 1회한 / 1년 미만 50%</td></tr>
+<tr><td class="r-cat">간·췌장·폐질환</td><td class="num">500만원</td><td>연간 1회한 / 1년 미만 50%</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">surgery.closed.major</span><span class="ie-v">10,000,000</span><span class="conf-pill high">96%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.closed.minor</span><span class="ie-v">5,000,000</span><span class="conf-pill high">96%</span></div>
+<div class="ie-item"><span class="ie-k">limit.annual_count</span><span class="ie-v">1</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'cov-4': {
+ title: '약관 §6.4 감액지급조건',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p · Document Parse OK',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§6.4</span>
+<span class="src-card-title">감액지급조건</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">
+ "<b>보험기간 시작일부터</b>1년 미만 보험사고 발생시 약정 보험금의 50%를 감액하여 지급합니다."
+</div>
+<div class="src-callout warn">
+<b>안내장 표기:</b>"1년 미만 50% 지급" — 시작 기준이 명시되지 않아 오해 소지가 있습니다. 감독규정상 "보험기간 시작일부터" 명시를 권장합니다.
+</div>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">reduction.threshold</span><span class="ie-v">1년 (시작일 기준)</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">reduction.rate</span><span class="ie-v">50%</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+
+ // === Rider ===
+ 'rider-1': {
+ title: '약관 §부록7 플러스뇌혈관질환 통원특약',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§부록7</span>
+<span class="src-card-title">플러스뇌혈관질환 통원특약</span>
+<span class="conf-pill high">conf 97%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>급부명</th><th>지급금액</th><th>한도</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">상급종합병원 통원급여금</td><td class="num">10만원</td><td>통원 1회당 / 연 30회</td></tr>
+<tr><td class="r-cat">뇌혈관질환 통원급여금</td><td class="num">2만원</td><td>통원 1회당 / 연 30회</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">rider.brain.supreme</span><span class="ie-v">100,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">rider.brain.general</span><span class="ie-v">20,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">rider.brain.annual_limit</span><span class="ie-v">30</span><span class="conf-pill high">97%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'rider-2': {
+ title: '약관 §부록8 플러스허혈성심질환 통원특약',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§부록8</span>
+<span class="src-card-title">플러스허혈성심질환 통원특약</span>
+<span class="conf-pill mid">conf 91%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">
+ "'허혈성심질환'으로 진단이 확정되고 보험기간 중 그 '허혈성심질환' 치료를<u><b>직접적인 목적으로</b></u>상급종합병원에 통원하였을 때..."
+</div>
+<table class="ie-table">
+<thead><tr><th>급부명</th><th>지급금액</th><th>한도</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">상급종합병원 통원급여금</td><td class="num">10만원</td><td>통원 1회당 / 연 30회</td></tr>
+<tr><td class="r-cat">허혈성심질환 통원급여금</td><td class="num">2만원</td><td>통원 1회당 / 연 30회</td></tr>
+</tbody>
+</table>
+<div class="src-callout warn">
+<b>Solar LLM 판정:</b>안내장 "치료를<u>직접목적으로</u>" → 약관 원문 "<u>직접적인 목적으로</u>"로 축약됨. 법적 의미는 동일하나 약관 원문 표기 권장.
+</div>
+</div>
+</div>`
+ },
+ 'rider-3': {
+ title: '약관 §부록12 플러스수술동반 입원특약',
+ docName: '백세팔팔NH건강보험 약관 [2601]',
+ docMeta: '353KB · 142p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§부록12</span>
+<span class="src-card-title">플러스수술동반 입원특약</span>
+<span class="conf-pill high">conf 96%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>급부명</th><th>지급금액</th><th>한도</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">질병재해 수술동반 입원비</td><td class="num">3만원</td><td>1일 초과 입원당 / 30일</td></tr>
+<tr><td class="r-cat">4대주요질병 수술동반 입원비</td><td class="num">5만원</td><td>1일 초과 입원당 / 30일</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">rider.surgery_hosp.general</span><span class="ie-v">30,000</span><span class="conf-pill high">96%</span></div>
+<div class="ie-item"><span class="ie-k">rider.surgery_hosp.major4</span><span class="ie-v">50,000</span><span class="conf-pill high">96%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+
+ // === Eligibility ===
+ 'elig-1': {
+ title: '사업방법서 §3.1 가입연령 표',
+ docName: '백세팔팔NH건강보험 사업방법서 [2506]',
+ docMeta: '37KB · 24p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§3.1</span>
+<span class="src-card-title">가입연령 표</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>구분</th><th>1형 (간편가입형Ⅱ)</th><th>2형 (일반가입형)</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">주계약 1종(갱신형)</td><td class="num">20세 ~ 80세</td><td class="num">만 15세 ~ 70세</td></tr>
+<tr><td class="r-cat">주계약 2종(비갱신형)</td><td class="num">20세 ~ 79세</td><td class="num">만 15세 ~ 70세</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">age.main_1.simple</span><span class="ie-v">20~80</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.normal</span><span class="ie-v">15~70</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_2.simple</span><span class="ie-v">20~79</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_2.normal</span><span class="ie-v">15~70</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'elig-2': {
+ title: '사업방법서 §4.2 납입주기',
+ docName: '백세팔팔NH건강보험 사업방법서 [2506]',
+ docMeta: '37KB · 24p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§4.2</span>
+<span class="src-card-title">보험료 납입주기</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">
+ 보험료 납입주기는<b>월납, 3개월납, 6개월납, 연납</b>의 4가지로 한다.
+</div>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">payment.cycles</span><span class="ie-v">[월,3월,6월,연]</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+ 'elig-3': {
+ title: '사업방법서 §3.3 보험기간·납입기간 매트릭스',
+ docName: '백세팔팔NH건강보험 사업방법서 [2506]',
+ docMeta: '37KB · 24p',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§3.3</span>
+<span class="src-card-title">보험기간·납입기간 매트릭스</span>
+<span class="conf-pill high">conf 98%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>주계약</th><th>보험기간</th><th>납입기간</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">1종(갱신형)</td><td class="num">20년 만기 (최대 100세)</td><td class="num">10/15년 · 전기납</td></tr>
+<tr><td class="r-cat">2종(비갱신형)</td><td class="num">100세 만기</td><td class="num">10/15/20/30년납</td></tr>
+</tbody>
+</table>
+</div>
+</div>`
+ },
+
+ // === Premium ===
+ 'prem-1': {
+ title: 'PV테이블 P_최초 · 1형 간편가입형',
+ docName: 'P_백세팔팔NH건강보험_2506_1종(갱신형)_최초',
+ docMeta: 'TXT (Fixed-width) · 5,576행',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">PV.1형</span>
+<span class="src-card-title">주계약 1형 간편가입형 · 남자</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<pre class="src-raw">I3050509 00 00 20 10 01 30 0 1 00 ...<span class="hl">5,600</span>
+I3050509 00 00 20 10 01 40 0 1 00 ...<span class="hl">9,800</span>
+I3050509 00 00 20 10 01 50 0 1 00 ...<span class="hl">16,500</span>
+I3050509 00 00 20 10 03 40 0 1 00 ...<span class="hl">48,700</span></pre>
+<table class="ie-table compact">
+<thead><tr><th>형태</th><th>30세</th><th>40세</th><th>50세</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">순수보장 20년</td><td class="num">5,600</td><td class="num">9,800</td><td class="num">16,500</td></tr>
+<tr><td class="r-cat">건강관리 100세</td><td class="num">31,900</td><td class="num">48,700</td><td class="num">73,000</td></tr>
+</tbody>
+</table>
+</div>
+</div>`
+ },
+ 'prem-2': {
+ title: 'PV테이블 P_최초 · 2형 일반가입형',
+ docName: 'P_백세팔팔NH건강보험_2506_1종(갱신형)_최초',
+ docMeta: 'TXT (Fixed-width) · 5,576행',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">PV.2형 (불일치)</span>
+<span class="src-card-title">주계약 2형 일반가입형 · 남자</span>
+<span class="conf-pill low">conf 74%</span>
+</div>
+<div class="src-card-body">
+<pre class="src-raw">I3050509 00 00 20 20 01 30 0 1 00 ...<span class="hl">4,500</span>
+I3050509 00 00 20 20 01 40 0 1 00 ...<span class="hl">7,300</span>
+I3050509 00 00 20 20 01 50 0 1 00 ...<span class="hl">12,100</span>
+I3050509 00 00 20 20 03 40 0 1 00 ...<span class="hl" style="background: rgba(220,38,38,0.4); color: #FCA5A5;">47,500</span>← PV산출값</pre>
+<table class="ie-table compact">
+<thead><tr><th>형태</th><th>30세</th><th>40세</th><th>50세</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">순수보장 20년</td><td class="num">4,500</td><td class="num">7,300</td><td class="num">12,100</td></tr>
+<tr class="err-row"><td class="r-cat">건강관리 100세</td><td class="num">24,700</td><td class="num">47,500</td><td class="num">73,200</td></tr>
+</tbody>
+</table>
+<div class="src-callout err">
+<b>불일치:</b>40세 건강관리형 100세만기 → PV테이블 산출<b>47,500원</b>vs 안내장<b>40,100원</b><br>
+<b>Solar LLM:</b>베타값 0.93 → 1.10 변경(2506 개정)이 안내장에 미반영된 것으로 추정.
+</div>
+</div>
+</div>`
+ },
+ 'prem-3': {
+ title: 'PV테이블 P_최초 · 진단특약 보험료',
+ docName: 'P_백세팔팔NH건강보험_2506_1종(갱신형)_최초',
+ docMeta: 'TXT (Fixed-width) · 5,576행',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">PV.진단</span>
+<span class="src-card-title">진단특약 보험료 (소액암·뇌출중)</span>
+<span class="conf-pill high">conf 98%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>특약</th><th>30세</th><th>40세</th><th>50세</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">소액암진단특약 / 1종 간편</td><td class="num">260</td><td class="num">300</td><td class="num">440</td></tr>
+<tr><td class="r-cat">뇌출중진단특약 / 1종 간편</td><td class="num">1,100</td><td class="num">1,240</td><td class="num">1,400</td></tr>
+</tbody>
+</table>
+</div>
+</div>`
+ },
+
+ // ============================================================
+ // Aggregate Document Parse views (sidebar click → SOURCE col)
+ // ============================================================
+ 'guide-all': {
+ title: '백세팔팔NH건강보험 안내장 [_0509_V2]',
+ docName: '백세팔팔NH건강보험_0509_V2.pdf',
+ docMeta: '9p · 1.31 MB · Document Parse 완료 (avg conf 0.95)',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Overview</span>
+<span class="src-card-title">안내장 Document Parse 통계</span>
+<span class="conf-pill high">avg 95%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>구분</th><th>수</th><th>avg conf</th></tr></thead>
+<tbody>
+<tr><td>총 페이지 (펼침 기준)</td><td class="num">9</td><td class="num">—</td></tr>
+<tr><td>레이아웃 element</td><td class="num">412</td><td class="num">0.96</td></tr>
+<tr><td>표 (table)</td><td class="num">12</td><td class="num">0.93</td></tr>
+<tr><td>이미지·도형 (figure)</td><td class="num">6</td><td class="num">0.91</td></tr>
+<tr><td>워드 (word-level layout)</td><td class="num">4,287</td><td class="num">0.97</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">page-level</span>
+<span class="src-card-title">페이지별 파싱 결과</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>p.</th><th>섹션</th><th>표</th><th>도형</th><th>conf</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>표지</td><td class="num">0</td><td class="num">1</td><td class="num">0.98</td></tr>
+<tr><td>2</td><td>보장 그림 (수술자금)</td><td class="num">0</td><td class="num">2</td><td class="num">0.94</td></tr>
+<tr><td>3</td><td>진단·치료자금 그림</td><td class="num">0</td><td class="num">2</td><td class="num">0.95</td></tr>
+<tr><td>4</td><td>가입나이 / 상품구성</td><td class="num">3</td><td class="num">0</td><td class="num">0.99</td></tr>
+<tr><td>5</td><td>선택특약 (암 진단)</td><td class="num">1</td><td class="num">0</td><td class="num">0.96</td></tr>
+<tr><td>6</td><td>선택특약 (항암)</td><td class="num">1</td><td class="num">1</td><td class="num">0.92</td></tr>
+<tr><td>7</td><td>선택특약 (뇌·심·수술)</td><td class="num">1</td><td class="num">0</td><td class="num">0.95</td></tr>
+<tr><td>8</td><td>보험료 / 해약환급금</td><td class="num">5</td><td class="num">0</td><td class="num">0.99</td></tr>
+<tr><td>9</td><td>가입안내·고객권리</td><td class="num">1</td><td class="num">0</td><td class="num">0.93</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">IE</span>
+<span class="src-card-title">Information Extraction · 24개 항목</span>
+<span class="conf-pill mid">avg 90%</span>
+</div>
+<div class="src-card-body">
+<div class="ie-extract" style="margin-top:0;">
+<div class="ie-h">안내장에서 추출된 핵심 필드 (요약)</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">product.name</span><span class="ie-v">백세팔팔NH건강보험</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">product.code</span><span class="ie-v">I3050509</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.max_payout</span><span class="ie-v">20,000,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.simple</span><span class="ie-v">20-80</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.normal</span><span class="ie-v">15-70</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">payment.cycles</span><span class="ie-v">월/3월/6월/연</span><span class="conf-pill high">97%</span></div>
+<div class="ie-item"><span class="ie-k">premium.form_2.age40.health100</span><span class="ie-v">40,100</span><span class="conf-pill low">74%</span></div>
+<div class="ie-item"><span class="ie-k">rider.brain.supreme</span><span class="ie-v">100,000</span><span class="conf-pill high">97%</span></div>
+<div class="ie-item"><span class="ie-k">rider.heart_isch.supreme</span><span class="ie-v">100,000</span><span class="conf-pill mid">91%</span></div>
+<div class="ie-item"><span class="ie-k">limit.first_year_reduction</span><span class="ie-v">50%</span><span class="conf-pill mid">93%</span></div>
+</div>
+</div>
+<div class="src-callout">검수 항목과 매핑된 발췌·근거를 보려면 우측 검수 결과에서 카드를 클릭하세요. 안내장의 워드 단위 bbox는 좌측 페이지에 즉시 표시됩니다.</div>
+</div>
+</div>`
+ },
+
+ 'yakkwan-all': {
+ title: '백세팔팔NH건강보험 약관 [2601개정]',
+ docName: '백세팔팔NH건강보험(갱신형,비갱신형,무배당)_2506_약관[2601개정].hwp',
+ docMeta: '142p · 353 KB · Document Parse 완료 (avg conf 0.94)',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Overview</span>
+<span class="src-card-title">약관 Document Parse 통계</span>
+<span class="conf-pill high">avg 94%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>구분</th><th>수</th><th>avg conf</th></tr></thead>
+<tbody>
+<tr><td>총 페이지</td><td class="num">142</td><td class="num">—</td></tr>
+<tr><td>조항 (article)</td><td class="num">2,847</td><td class="num">0.96</td></tr>
+<tr><td>표 (table)</td><td class="num">96</td><td class="num">0.92</td></tr>
+<tr><td>별표 (appendix)</td><td class="num">14</td><td class="num">0.95</td></tr>
+<tr><td>각주 (footnote)</td><td class="num">324</td><td class="num">0.95</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§27 [별표3]</span>
+<span class="src-card-title">수술자금 급부표</span>
+<span class="conf-pill high">conf 97%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>구분</th><th>4대질병</th><th>지급금액</th><th>지급조건</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="r-cat">관혈수술</td><td>뇌혈관·심질환</td><td class="num">2,000만원</td><td>수술 1회당 · 1년미만 50%</td></tr>
+<tr><td>간·췌장·폐</td><td class="num">1,000만원</td><td>수술 1회당 · 1년미만 50%</td></tr>
+<tr><td rowspan="2" class="r-cat">비관혈수술</td><td>뇌혈관·심질환</td><td class="num">1,000만원</td><td>연 1회한 · 1년미만 50%</td></tr>
+<tr><td>간·췌장·폐</td><td class="num">500만원</td><td>연 1회한 · 1년미만 50%</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">surgery.open.major_disease</span><span class="ie-v">20,000,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.open.minor_disease</span><span class="ie-v">10,000,000</span><span class="conf-pill high">97%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.closed.major_disease</span><span class="ie-v">10,000,000</span><span class="conf-pill high">96%</span></div>
+<div class="ie-item"><span class="ie-k">surgery.closed.minor_disease</span><span class="ie-v">5,000,000</span><span class="conf-pill high">96%</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§6.4</span>
+<span class="src-card-title">감액지급조건</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">"보험기간 시작일부터 1년 미만 보험사고 발생시 약정 보험금의 50%를 감액 지급한다."</div>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">reduction.threshold</span><span class="ie-v">1년 (시작일 기준)</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">reduction.rate</span><span class="ie-v">50%</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§부록7~12</span>
+<span class="src-card-title">플러스 통원·입원특약 급부표</span>
+<span class="conf-pill mid">conf 91%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>특약</th><th>급부</th><th>금액</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="r-cat">플러스뇌혈관질환 통원</td><td>상급종합병원</td><td class="num">10만원</td></tr>
+<tr><td>뇌혈관질환</td><td class="num">2만원</td></tr>
+<tr><td rowspan="2" class="r-cat">플러스허혈성심질환 통원</td><td>상급종합병원</td><td class="num">10만원</td></tr>
+<tr><td>허혈성심질환</td><td class="num">2만원</td></tr>
+<tr><td rowspan="2" class="r-cat">플러스수술동반 입원</td><td>질병재해</td><td class="num">3만원</td></tr>
+<tr><td>4대주요질병</td><td class="num">5만원</td></tr>
+</tbody>
+</table>
+<div class="src-callout warn">
+<b>Solar LLM 주의:</b>"허혈성심질환 치료를<u>직접적인 목적으로</u>" (약관) vs "<u>직접목적으로</u>" (안내장) — 표현 차이 검출
+</div>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">IE</span>
+<span class="src-card-title">전체 IE 결과 요약 (96개 항목 중)</span>
+<span class="conf-pill high">avg 94%</span>
+</div>
+<div class="src-card-body">
+<div class="ie-extract" style="margin-top:0;">
+<div class="ie-h">주요 추출 필드</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">limit.first_year_reduction</span><span class="ie-v">50%</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">rider.brain.supreme</span><span class="ie-v">100,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">rider.brain.general</span><span class="ie-v">20,000</span><span class="conf-pill high">98%</span></div>
+<div class="ie-item"><span class="ie-k">rider.heart_isch.supreme</span><span class="ie-v">100,000</span><span class="conf-pill mid">91%</span></div>
+<div class="ie-item"><span class="ie-k">rider.heart_isch.general</span><span class="ie-v">20,000</span><span class="conf-pill mid">90%</span></div>
+<div class="ie-item"><span class="ie-k">rider.surgery_hosp.general</span><span class="ie-v">30,000</span><span class="conf-pill high">96%</span></div>
+<div class="ie-item"><span class="ie-k">rider.surgery_hosp.major4</span><span class="ie-v">50,000</span><span class="conf-pill high">96%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+
+ 'sabang-all': {
+ title: '백세팔팔NH건강보험 사업방법서 [2506개정]',
+ docName: '백세팔팔NH건강보험(갱신형,비갱신형,무배당)_2506_사업방법서.hwp',
+ docMeta: '24p · 37 KB · Document Parse 완료 (avg conf 0.98)',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Overview</span>
+<span class="src-card-title">사업방법서 Document Parse 통계</span>
+<span class="conf-pill high">avg 98%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>구분</th><th>수</th><th>avg conf</th></tr></thead>
+<tbody>
+<tr><td>총 페이지</td><td class="num">24</td><td class="num">—</td></tr>
+<tr><td>조항</td><td class="num">412</td><td class="num">0.99</td></tr>
+<tr><td>표</td><td class="num">18</td><td class="num">0.98</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§3.1</span>
+<span class="src-card-title">가입연령 표</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>구분</th><th>1형(간편가입형Ⅱ)</th><th>2형(일반가입형)</th></tr></thead>
+<tbody>
+<tr><td class="r-cat">주계약 1종(갱신형)</td><td class="num">20세 ~ 80세</td><td class="num">만 15세 ~ 70세</td></tr>
+<tr><td class="r-cat">주계약 2종(비갱신형)</td><td class="num">20세 ~ 79세</td><td class="num">만 15세 ~ 70세</td></tr>
+<tr><td class="r-cat">특약</td><td colspan="2" style="text-align:center;">주계약과 동일 (일부 특약 제외)</td></tr>
+</tbody>
+</table>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">age.main_1.simple.min</span><span class="ie-v">20</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.simple.max</span><span class="ie-v">80</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.normal.min</span><span class="ie-v">15</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_1.normal.max</span><span class="ie-v">70</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">age.main_2.simple.max</span><span class="ie-v">79</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§3.3</span>
+<span class="src-card-title">보험기간 · 납입기간 매트릭스</span>
+<span class="conf-pill high">conf 98%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table">
+<thead><tr><th>주계약</th><th>형태</th><th>보험기간</th><th>납입기간</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="r-cat">1종(갱신형)</td><td>순수보장형</td><td class="num">20년 만기 (최대 100세)</td><td class="num">10/15년 · 전기납</td></tr>
+<tr><td>건강관리형</td><td class="num">20년 만기 (최대 100세)</td><td class="num">10/15년 · 전기납</td></tr>
+<tr><td rowspan="2" class="r-cat">2종(비갱신형)</td><td>순수보장형</td><td class="num">100세 만기</td><td class="num">10/15/20/30년납</td></tr>
+<tr><td>건강관리형</td><td class="num">100세 만기</td><td class="num">10/15/20/30년납</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">§4.2</span>
+<span class="src-card-title">보험료 납입주기</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<div class="src-quote">보험료 납입주기는<b>월납, 3개월납, 6개월납, 연납</b>의 4가지로 한다.</div>
+<div class="ie-extract">
+<div class="ie-h">Information Extraction</div>
+<div class="ie-items">
+<div class="ie-item"><span class="ie-k">payment.cycles</span><span class="ie-v">[월, 3월, 6월, 연]</span><span class="conf-pill high">99%</span></div>
+<div class="ie-item"><span class="ie-k">payment.cycle_count</span><span class="ie-v">4</span><span class="conf-pill high">99%</span></div>
+</div>
+</div>
+</div>
+</div>`
+ },
+
+ 'pvtable-all': {
+ title: 'PV테이블 P_최초 / P_갱신',
+ docName: 'P_백세팔팔NH건강보험_2506_1종(갱신형)_최초·갱신',
+ docMeta: 'TXT(Fixed-width) · 10,320행 · 16컬럼 · Document Parse(Schema) 완료',
+ html: `
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Overview</span>
+<span class="src-card-title">PV테이블 Schema Parse 통계</span>
+<span class="conf-pill high">avg 99%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>파일</th><th>행</th><th>parse conf</th></tr></thead>
+<tbody>
+<tr><td>P_최초_베타변경</td><td class="num">5,576</td><td class="num">0.99</td></tr>
+<tr><td>P_갱신_베타변경</td><td class="num">4,744</td><td class="num">0.99</td></tr>
+<tr><td><b>합계</b></td><td class="num"><b>10,320</b></td><td class="num">—</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Schema</span>
+<span class="src-card-title">컬럼 정의 (Document Parse 기반)</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>#</th><th>필드</th><th>타입</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>product_code</td><td>str(8)</td><td>I3050509</td></tr>
+<tr><td>2</td><td>gender</td><td>int</td><td>0:남 / 1:여</td></tr>
+<tr><td>3</td><td>age</td><td>int</td><td>가입나이</td></tr>
+<tr><td>4</td><td>form_type</td><td>int</td><td>10:1형 간편 / 20:2형 일반</td></tr>
+<tr><td>5</td><td>plan</td><td>int</td><td>01:순수보장 / 03:건강관리</td></tr>
+<tr><td>6</td><td>policy_term</td><td>int</td><td>보험기간 (년)</td></tr>
+<tr><td>7</td><td>premium</td><td>int</td><td>월보험료 (KRW)</td></tr>
+<tr><td>8</td><td>surrender_value</td><td>int</td><td>해약환급금 (KRW)</td></tr>
+<tr><td>9</td><td>beta</td><td>float</td><td>위험률 조정 베타값 (★ 0.93→1.10)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">Sample</span>
+<span class="src-card-title">Raw Fixed-width 발췌</span>
+<span class="conf-pill high">conf 99%</span>
+</div>
+<div class="src-card-body">
+<pre class="src-raw">I3050509 00 00 20 10 01 30 0 1 00 20250602 99991231<span class="hl">5,600</span>(1형 30세 순수 20년)
+I3050509 00 00 20 10 01 40 0 1 00 20250602 99991231<span class="hl">9,800</span>(1형 40세 순수 20년)
+I3050509 00 00 20 20 01 40 0 1 00 20250602 99991231<span class="hl">7,300</span>(2형 40세 순수 20년)
+I3050509 00 00 20 20 03 40 0 1 00 20250602 99991231<span class="hl" style="background:rgba(220,38,38,0.4);color:#FCA5A5;">47,500</span>(2형 40세 건강 100세 ★ 불일치)
+I3050509 00 00 20 10 03 40 0 1 00 20250602 99991231<span class="hl">48,700</span>(1형 40세 건강 100세)</pre>
+</div>
+</div>
+
+<div class="src-doc-card">
+<div class="src-card-head">
+<span class="src-anchor">IE.parsed</span>
+<span class="src-card-title">주계약 보험료 매트릭스 (남자)</span>
+<span class="conf-pill mid">conf 89%</span>
+</div>
+<div class="src-card-body">
+<table class="ie-table compact">
+<thead><tr><th>형</th><th>플랜</th><th>기간</th><th>30세</th><th>40세</th><th>50세</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="r-cat">1형 간편</td><td>순수보장</td><td>20년</td><td class="num">5,600</td><td class="num">9,800</td><td class="num">16,500</td></tr>
+<tr><td>건강관리</td><td>100세</td><td class="num">31,900</td><td class="num">48,700</td><td class="num">73,000</td></tr>
+<tr><td rowspan="2" class="r-cat">2형 일반</td><td>순수보장</td><td>20년</td><td class="num">4,500</td><td class="num">7,300</td><td class="num">12,100</td></tr>
+<tr class="err-row"><td>건강관리</td><td>100세</td><td class="num">24,700</td><td class="num">47,500</td><td class="num">73,200</td></tr>
+</tbody>
+</table>
+<div class="src-callout err">
+<b>불일치 후보:</b>2형 일반·건강관리·100세 행에서 안내장 표기는 40세<b>40,100원</b>이나 PV 산출값은<b>47,500원</b>. 베타값 조정(2506) 반영 누락으로 추정.
+</div>
+</div>
+</div>`
+ }
+};
+
+// ============================================================
+// REVIEW DATA
+// ============================================================
+let REVIEW_DATA = {
+  coverage: { title: '보장내용·그림 검수', items: [] },
+  rider: { title: '선택특약·급부 검수', items: [] },
+  eligibility: { title: '가입나이·납입 검수', items: [] },
+  premium: { title: '보험료·해약환급 검수', items: [] }
+};
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function confPill(c) {
+ const pct = Math.round(c * 100);
+ let cls = 'low';
+ if (c >= 0.95) cls = 'high';
+ else if (c >= 0.85) cls = 'mid';
+ return `<span class="conf-pill ${cls}">conf ${pct}%</span>`;
+}
+
+function renderItem(item) {
+ const matchSign = item.status === 'ok' ? '=' : item.status === 'warn' ? '≈' : '≠';
+ let body = '';
+
+ if (item.guide && item.source) {
+ const statusCls = item.status === 'ok' ? 'match' : item.status === 'warn' ? 'warn' : 'err';
+ body += `
+<div class="cmp-mini ${statusCls}">
+<div class="cmp-card guide">
+<div class="cmp-tag">안내장</div>
+<div class="cmp-val">${item.guide.value}</div>
+</div>
+<div class="cmp-arrow">${matchSign}</div>
+<div class="cmp-card source">
+<div class="cmp-tag">${item.source.doc || '원본'}</div>
+<div class="cmp-val">${item.source.value}</div>
+</div>
+</div>
+<div class="ri-conf">
+ ${confPill(item.guide.conf)} ${confPill(item.source.conf)}
+<button class="src-link-btn" onclick="event.stopPropagation(); showSource('${item.id}')">원본 보기</button>
+</div>
+ `;
+ }
+
+ if (item.rows) {
+ body += `<table class="ri-rows"><thead><tr>
+<th style="text-align:left;">항목</th>
+<th style="text-align:right;">안내장</th>
+<th style="text-align:right;">원본</th>
+<th></th>
+</tr></thead><tbody>`;
+ item.rows.forEach(r =>{
+ const m = r.match === false ? false : (r.guide === r.source);
+ body += `<tr ${!m ? 'class="match-no"' : ''}>
+<td>${r.item}</td>
+<td class="num guide-c">${r.guide}</td>
+<td class="num source-c" style="${!m ? 'color: var(--danger);' : ''}">${r.source}</td>
+<td class="mark" style="color: ${m ? 'var(--success)' : 'var(--danger)'};">${m ? '=' : '≠'}</td>
+</tr>`;
+ });
+ body += `</tbody></table>
+<div class="ri-conf">
+ ${confPill(item.conf)}<span>· ${item.srcDoc}</span>
+<button class="src-link-btn" onclick="event.stopPropagation(); showSource('${item.id}')">원본 발췌</button>
+</div>`;
+ }
+
+ if (item.warning) body += `<div class="diff-note warn"><div><b>경고:</b>${item.warning}</div></div>`;
+ if (item.error) body += `<div class="diff-note"><div><b>불일치:</b>${item.error}</div></div>`;
+ if (item.ai) body += `<div class="ai-insight"><div class="ai-h">Solar LLM</div>${item.ai}</div>`;
+
+ const statusLabel = item.status === 'ok' ? '일치' : item.status === 'warn' ? '경고' : '불일치';
+ return `
+<div class="review-item ${item.status}" data-item="${item.id}" onclick="selectItem('${item.id}')">
+<div class="ri-head">
+<div class="ri-name">${item.name}</div>
+<div class="ri-status ${item.status}">${statusLabel}</div>
+</div>
+<div class="ri-body">${body}</div>
+</div>`;
+}
+
+function renderCategory(catKey) {
+  const cat = REVIEW_DATA[catKey];
+  if (!cat) return;
+  document.getElementById('reviewTitle').textContent = cat.title;
+  document.getElementById('reviewMeta').textContent = (cat.items.length || 0) + ' 항목';
+
+  const canvas = document.getElementById('reviewCanvas');
+  if (!cat.items || cat.items.length === 0) {
+    const guideUploaded = Object.keys(UPLOADED_DOCS || {}).some(k => PG_DOCS[k] && PG_DOCS[k].isPdf);
+    const sourceUploaded = Object.keys(UPLOADED_DOCS || {}).some(k => PG_DOCS[k] && !PG_DOCS[k].isPdf);
+    canvas.innerHTML = '<div class="review-empty">' +
+      '<div class="empty-title">검수 결과가 비어있습니다</div>' +
+      '<div>좌측 [검수 실행] 버튼을 눌러 안내장과 원본 문서를 자동 비교하세요.</div>' +
+      '<div class="empty-steps">' +
+        '<div class="empty-step ' + (guideUploaded ? 'done' : '') + '"><div class="step-n">1</div><div class="step-text">안내장 PDF 업로드 — <b>안내장 파싱 결과</b> 탭 <span style="color:' + (guideUploaded ? 'var(--success)' : 'var(--text-tertiary)') + ';">(' + (guideUploaded ? '완료' : '미업로드') + ')</span></div></div>' +
+        '<div class="empty-step ' + (sourceUploaded ? 'done' : '') + '"><div class="step-n">2</div><div class="step-text">원본 문서 업로드 (약관·사방서·PV) — <b>원본 문서 파싱 결과</b> 탭 <span style="color:' + (sourceUploaded ? 'var(--success)' : 'var(--text-tertiary)') + ';">(' + (sourceUploaded ? '완료' : '미업로드') + ')</span></div></div>' +
+        '<div class="empty-step"><div class="step-n">3</div><div class="step-text">사이드바의 <b>검수 실행</b> 버튼 클릭 → Solar LLM이 안내장과 원본을 항목별 비교</div></div>' +
+      '</div></div>';
+    clearBboxes();
+    showSourceEmpty();
+    return;
+  }
+
+  canvas.innerHTML = cat.items.map(renderItem).join('');
+  const firstId = cat.items[0] && cat.items[0].id;
+  if (firstId) scrollGuideTo(firstId);
+}
+
+function updateReviewStats() {
+  let ok=0, warn=0, err=0;
+  for (const cat of Object.values(REVIEW_DATA)) {
+    for (const it of (cat.items || [])) {
+      if (it.status === 'ok') ok++;
+      else if (it.status === 'warn') warn++;
+      else if (it.status === 'err') err++;
+    }
+  }
+  const total = ok + warn + err;
+  if (document.getElementById('statOk')) {
+    document.getElementById('statOk').textContent = ok;
+    document.getElementById('statWarn').textContent = warn;
+    document.getElementById('statErr').textContent = err;
+    document.getElementById('statTotal').textContent = total;
+  }
+  ['coverage','rider','eligibility','premium'].forEach(cat => {
+    const items = (REVIEW_DATA[cat] && REVIEW_DATA[cat].items) || [];
+    const hasErr = items.some(i => i.status === 'err');
+    const hasWarn = items.some(i => i.status === 'warn');
+    const allOk = items.length > 0 && items.every(i => i.status === 'ok');
+    const el = document.querySelector('[data-cat-status="' + cat + '"]');
+    if (!el) return;
+    el.className = 'cat-status ' + (items.length === 0 ? 'pending' : hasErr ? 'err' : hasWarn ? 'warn' : allOk ? 'ok' : 'pending');
+    el.textContent = items.length === 0 ? '' : hasErr ? 'X' : hasWarn ? '!' : allOk ? 'OK' : '';
+  });
+}
+
+function updateTab3Sidebar() {
+  const guideListEl = document.getElementById('tab3GuideDocList');
+  const sourceListEl = document.getElementById('tab3SourceDocList');
+  if (!guideListEl || !sourceListEl) return;
+  const guideDocs = Object.entries(PG_DOCS).filter(([k,d]) => d.isPdf);
+  const sourceDocs = Object.entries(PG_DOCS).filter(([k,d]) => !d.isPdf);
+  guideListEl.innerHTML = guideDocs.length === 0
+    ? '<div class="pg-empty-list">안내장 파싱 결과 탭에서 업로드한 안내장이 여기에 표시됩니다</div>'
+    : guideDocs.map(([k,d]) => '<div class="doc-item"><div class="doc-ico pdf">PDF</div><div class="doc-meta"><div class="doc-name">' + escapeHtml(d.name) + '</div><div class="doc-sub">' + d.pages + 'p</div></div></div>').join('');
+  sourceListEl.innerHTML = sourceDocs.length === 0
+    ? '<div class="pg-empty-list">원본 문서 파싱 결과 탭에서 업로드한 원본 문서가 여기에 표시됩니다</div>'
+    : sourceDocs.map(([k,d]) => '<div class="doc-item"><div class="doc-ico ' + d.uploadType + '">' + d.uploadType.toUpperCase() + '</div><div class="doc-meta"><div class="doc-name">' + escapeHtml(d.name) + '</div><div class="doc-sub">' + d.pages + 'p</div></div></div>').join('');
+}
+
+function updateRunReviewBtn() {
+  const btn = document.getElementById('runReviewBtn');
+  const hint = document.getElementById('runReviewHint');
+  if (!btn) return;
+  const guideCount = Object.values(PG_DOCS || {}).filter(d => d.isPdf).length;
+  const sourceCount = Object.values(PG_DOCS || {}).filter(d => !d.isPdf).length;
+  const ready = guideCount > 0 && sourceCount > 0 && apiKey;
+  btn.disabled = !ready;
+  if (!apiKey) hint.textContent = 'API 키 설정 필요 (우상단 설정)';
+  else if (guideCount === 0) hint.textContent = '안내장 PDF 업로드 필요';
+  else if (sourceCount === 0) hint.textContent = '원본 문서 업로드 필요';
+  else hint.textContent = '안내장 ' + guideCount + '건 · 원본 ' + sourceCount + '건 비교 준비됨';
+  updateTab3Sidebar();
+}
+
+async function runReview() {
+  if (!apiKey) {
+    alert('Upstage API 키가 필요합니다. 우상단 [API 설정]에서 키를 입력해주세요.');
+    return;
+  }
+  const btn = document.getElementById('runReviewBtn');
+  btn.classList.add('processing');
+  btn.textContent = '검수 진행 중...';
+
+  let guideText = '', sourceText = '';
+  for (const [k, doc] of Object.entries(UPLOADED_DOCS || {})) {
+    let txt = '';
+    for (const p of Object.values(doc.pages || {})) {
+      txt += (p.elements || []).map(e => e.text).join('\n') + '\n';
+    }
+    if (PG_DOCS[k].isPdf) guideText += '[안내장: ' + PG_DOCS[k].name + ']\n' + txt.substring(0, 6000) + '\n\n';
+    else sourceText += '[원본: ' + PG_DOCS[k].name + ']\n' + txt.substring(0, 6000) + '\n\n';
+  }
+
+  if (!guideText || !sourceText) {
+    alert('업로드된 문서에서 텍스트를 추출할 수 없습니다. Document Parse 호출 결과가 있어야 합니다.');
+    btn.classList.remove('processing'); btn.textContent = '검수 실행';
+    return;
+  }
+
+  try {
+    const prompt = '당신은 보험 안내장 자동 검수 AI입니다. 아래 [안내장]과 [원본 문서]를 비교하여 4개 카테고리로 정합성을 검수하세요.\n\n카테고리:\n- coverage: 보장내용·그림자료 (수술자금·진단자금·보장금액)\n- rider: 선택특약·급부 (특약별 지급금액·지급사유)\n- eligibility: 가입나이·납입주기·보험기간\n- premium: 보험료·해약환급금\n\n각 항목마다 status(ok/warn/err), name, guide(안내장 값), source(원본 값), note(차이 설명)을 반환.\n\nJSON 응답 형식: {"coverage":{"items":[{"id":"cov-1","name":"수술자금 최대 한도","status":"ok","guide":{"value":"2,000만원","conf":0.97},"source":{"value":"2,000만원","conf":0.99,"doc":"약관"},"note":"일치"}]},"rider":{"items":[]},"eligibility":{"items":[]},"premium":{"items":[]}}\n\n[안내장]\n' + guideText + '\n[원본 문서]\n' + sourceText;
+
+    const isLocalFile = location.protocol === 'file:';
+    const endpoint = isLocalFile ? 'https://api.upstage.ai/v1/solar/chat/completions' : '/api/solar';
+
+    let res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'solar-pro',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      })
+    });
+    if (!res.ok && !isLocalFile && res.status === 404) {
+      res = await fetch('https://api.upstage.ai/v1/solar/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'solar-pro',
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' }
+        })
+      });
+    }
+    if (!res.ok) throw new Error('Solar LLM ' + res.status + ': ' + (await res.text()).substring(0, 200));
+    const json = await res.json();
+    const content = json.choices && json.choices[0] && json.choices[0].message && json.choices[0].message.content;
+    const parsed = JSON.parse(content);
+
+    for (const cat of ['coverage','rider','eligibility','premium']) {
+      const items = (parsed[cat] && parsed[cat].items) || [];
+      REVIEW_DATA[cat].items = items.map((it, i) => ({ id: it.id || (cat + '-' + (i+1)), ...it }));
+    }
+    const activeCat = document.querySelector('.cat-item.active');
+    const catKey = activeCat ? activeCat.dataset.cat : 'coverage';
+    renderCategory(catKey);
+    updateReviewStats();
+  } catch (err) {
+    alert('검수 실행 중 오류: ' + err.message);
+    console.error(err);
+  } finally {
+    btn.classList.remove('processing');
+    btn.textContent = '검수 실행';
+    updateRunReviewBtn();
+  }
+}
+
+function switchCategory(catKey, el) {
+ document.querySelectorAll('.cat-item').forEach(b =>b.classList.remove('active'));
+ if (el) el.classList.add('active');
+ renderCategory(catKey);
+ clearBboxes();
+ // Clear source panel
+ showSourceEmpty();
+}
+
+// ============================================================
+// BBOX (Word-level overlay)
+// ============================================================
+function clearBboxes() {
+ document.querySelectorAll('.wbox').forEach(w =>w.remove());
+}
+
+function drawBboxesFor(itemId, statusCls) {
+ clearBboxes();
+ const data = BBOX_DATA[itemId];
+ if (!data) return;
+ const pageEl = document.querySelector(`.pdf-page[data-page="${data.pdf_page}"]`);
+ if (!pageEl) return;
+ data.words.forEach((w, idx) =>{
+ const box = document.createElement('div');
+ box.className = `wbox ${statusCls} ${idx === 0 ? 'label-anchor' : ''}`;
+ box.style.left = w.left + '%';
+ box.style.top = w.top + '%';
+ box.style.width = w.width + '%';
+ box.style.height = w.height + '%';
+ if (idx === 0) box.setAttribute('data-grouplabel', data.label);
+ pageEl.appendChild(box);
+ requestAnimationFrame(() =>box.classList.add('active'));
+ });
+
+ // Scroll guide to this page
+ const canvas = document.getElementById('guideCanvas');
+ const pageRect = pageEl.getBoundingClientRect();
+ const canvasRect = canvas.getBoundingClientRect();
+ canvas.scrollTop += (pageRect.top - canvasRect.top) - 30;
+ document.getElementById('guideMeta').textContent = `p.${data.pdf_page} · ${data.words.length}개 워드 박스`;
+}
+
+function scrollGuideTo(itemId) {
+ const data = BBOX_DATA[itemId];
+ if (!data) return;
+ const pageEl = document.querySelector(`.pdf-page[data-page="${data.pdf_page}"]`);
+ if (pageEl) {
+ pageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ }
+}
+
+// ============================================================
+// SOURCE PANEL
+// ============================================================
+function showSourceEmpty() {
+ document.getElementById('sourceCanvas').innerHTML = `
+<div class="source-empty">
+<div class="ico"></div>
+<div>우측 검수 결과에서 항목을 클릭하면<br>해당 원본 문서의 발췌·IE 결과·confidence가 표시됩니다.</div>
+</div>`;
+ document.getElementById('sourceTitle').textContent = '선택된 검수 항목 없음';
+ document.getElementById('sourceMeta').textContent = '—';
+}
+
+function showSource(itemId) {
+ const data = SOURCE_DATA[itemId];
+ if (!data) { showSourceEmpty(); return; }
+ document.getElementById('sourceTitle').textContent = data.title;
+ document.getElementById('sourceMeta').textContent = data.docMeta;
+ document.getElementById('sourceCanvas').innerHTML = data.html;
+ document.getElementById('sourceCanvas').scrollTop = 0;
+}
+
+// Sidebar doc click — show full Document Parse result for that document
+function showDocParse(allKey, el) {
+ // active state for sidebar
+ document.querySelectorAll('.doc-item').forEach(d =>d.classList.remove('active'));
+ if (el) el.classList.add('active');
+
+ // clear bbox + review-item selection (since we're showing doc-level, not item-level)
+ clearBboxes();
+ document.querySelectorAll('.review-item').forEach(c =>c.classList.remove('selected'));
+
+ // render source col
+ showSource(allKey);
+
+ // if it's the guide PDF, scroll guide canvas to top
+ if (allKey === 'guide-all') {
+ document.getElementById('guideCanvas').scrollTop = 0;
+ document.getElementById('guideMeta').textContent = 'p.1~9 · 전체 보기';
+ }
+}
+
+// ============================================================
+// ITEM SELECTION (links all 3 columns)
+// ============================================================
+function selectItem(itemId) {
+ // Find item status
+ let status = 'ok';
+ for (const cat of Object.values(REVIEW_DATA)) {
+ const it = cat.items.find(i =>i.id === itemId);
+ if (it) { status = it.status; break; }
+ }
+
+ // 1) Highlight review card
+ document.querySelectorAll('.review-item').forEach(c =>c.classList.remove('selected'));
+ const card = document.querySelector(`.review-item[data-item="${itemId}"]`);
+ if (card) card.classList.add('selected');
+
+ // 2) Draw bbox in guide column
+ drawBboxesFor(itemId, status);
+
+ // 3) Show source in source column
+ showSource(itemId);
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+let appMode = 'mock';
+let apiKey = '';
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); }
+function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
+function setMode(m) {
+ appMode = m;
+ document.getElementById('modeMock').classList.toggle('active', m === 'mock');
+ document.getElementById('modeReal').classList.toggle('active', m === 'real');
+}
+function saveSettings() {
+ apiKey = document.getElementById('apiKey').value.trim();
+ if (appMode === 'real' && !apiKey) { alert('API 키가 필요합니다.'); return; }
+ closeSettings();
+ if (typeof updateRunReviewBtn === 'function') updateRunReviewBtn();
+}
+
+async function runRealApi() {
+ if (!apiKey) {
+ alert('API 키가 설정되지 않았습니다. API 설정에서 입력해주세요.');
+ openSettings();
+ return;
+ }
+ try {
+ const pdfRes = await fetch('assets/안내장.pdf');
+ const pdfBlob = await pdfRes.blob();
+
+ const fd = new FormData();
+ fd.append('document', pdfBlob, '안내장.pdf');
+ fd.append('model', 'document-parse');
+ fd.append('output_formats', '["html","text"]');
+ fd.append('coordinates', 'true'); // request word-level coords
+
+ const res = await fetch('https://api.upstage.ai/v1/document-digitization', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${apiKey}` },
+ body: fd
+ });
+ if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + (await res.text()).substring(0,200));
+ const json = await res.json();
+ console.log('Document Parse (with coordinates):', json);
+ alert(` Document Parse 완료\n페이지: ${json.usage?.pages || 'N/A'}\nelements: ${json.elements?.length || 0}\n\n워드 좌표(coordinates) 응답이 콘솔(F12)에 출력됩니다.\n실제 운영에서는 이 좌표로 bbox가 자동 갱신됩니다.`);
+ } catch (err) {
+ alert('API 호출 오류: ' + err.message + '\n\nCORS로 차단되면 백엔드 프록시 사용을 권장합니다.');
+ console.error(err);
+ }
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tabName, el) {
+ document.querySelectorAll('.tab-btn').forEach(b =>b.classList.remove('active'));
+ document.querySelectorAll('.tab-panel').forEach(p =>p.classList.remove('active'));
+ if (el) el.classList.add('active');
+ else {
+ const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+ if (btn) btn.classList.add('active');
+ }
+ const panel = document.querySelector(`.tab-panel[data-tab="${tabName}"]`);
+ if (panel) panel.classList.add('active');
+
+ // Tab-specific init
+ if (tabName === 'source-parse') {
+ renderPg('source-parse');
+ } else if (tabName === 'guide-parse') {
+ renderPg('guide-parse');
+ }
+}
+
+function selectParseDoc(key, el) {
+ document.querySelectorAll('.parse-doc-card').forEach(c =>c.classList.remove('active'));
+ if (el) el.classList.add('active');
+ renderParseTab(key);
+}
+
+// ============================================================
+// ORIGINAL VIEW (HWP / TXT mock-ups in paper style)
+// ============================================================
+const ORIGINAL_VIEW = {
+ 'yakkwan-all': {
+ meta: 'HWP · 142p · 약관 발췌 3개 페이지',
+ html: `
+<div class="paper" data-pagelabel="p.34 / 142">
+<div class="ph1">제 27 조 (수술자금의 지급)</div>
+<div class="ph2">[별표 3] 수술자금 급부표</div>
+<p>회사는 피보험자가 보험기간 중 다음 각 호의 사유로 수술을 받았을 때 수술자금을 약정 보험가입금액에 따라 지급합니다. 단, 보험기간 시작일부터<span class="ohl">1년 미만</span>의 보험사고에 대해서는 약정 보험금의<span class="ohl">50%</span>를 감액하여 지급합니다.</p>
+<table class="htbl">
+<thead><tr><th rowspan="2">구분</th><th rowspan="2">4대 주요질병</th><th>주계약 가입금액</th><th rowspan="2">지급조건</th></tr><tr><th>1,000만원</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="cat">관혈수술</td><td>뇌혈관·심질환</td><td class="num"><span class="ohl">2,000만원</span></td><td>수술 1회당</td></tr>
+<tr><td>간·췌장·폐질환</td><td class="num"><span class="ohl">1,000만원</span></td><td>수술 1회당</td></tr>
+<tr><td rowspan="2" class="cat">비관혈수술</td><td>뇌혈관·심질환</td><td class="num"><span class="ohl">1,000만원</span></td><td>연간 1회한</td></tr>
+<tr><td>간·췌장·폐질환</td><td class="num"><span class="ohl">500만원</span></td><td>연간 1회한</td></tr>
+</tbody>
+</table>
+<p class="indent">※ 관혈수술이란 피부를 절개하여 외과적 수술을 시행하는 것을 말하며, 비관혈수술이란 내시경·카테터·신의료기술 등 피부절개를 동반하지 않는 수술적 처치를 말합니다.</p>
+<div class="footer-line">백세팔팔NH건강보험 약관 [2601개정] · 34 of 142</div>
+</div>
+
+<div class="paper" data-pagelabel="p.12 / 142">
+<div class="ph2">제 6 조 (보험금의 지급)</div>
+<div class="ph3">제 4 항 감액지급조건</div>
+<div class="quote-block">
+ "보험기간 시작일부터 1년 미만 보험사고 발생시 약정 보험금의 50%를 감액하여 지급합니다. 다만, 제2조에서 정한 면책사유에 해당하는 경우에는 보험금을 지급하지 아니합니다."
+</div>
+<p>위 감액지급은 다음 보장 항목에 적용됩니다.</p>
+<p class="indent">① 수술자금 (관혈·비관혈 전 종목)</p>
+<p class="indent">② 진단자금 중 4대주요질병 진단보험금</p>
+<p class="indent">③ 특약에서 별도로 정한 급부금</p>
+<div class="footer-line">백세팔팔NH건강보험 약관 [2601개정] · 12 of 142</div>
+</div>
+
+<div class="paper" data-pagelabel="p.98 / 142">
+<div class="ph2">[부록 7] 플러스뇌혈관질환 통원특약</div>
+<div class="ph2" style="font-size: 12px; border-bottom: none; margin-top: 8px;">(갱신형·비갱신형·무배당)_H</div>
+<table class="htbl">
+<thead><tr><th>급부명</th><th>지급사유</th><th>지급금액</th></tr></thead>
+<tbody>
+<tr><td class="cat">상급종합병원 뇌혈관질환 통원급여금</td><td>'뇌혈관질환'으로 진단이 확정되고 보험기간 중 그 '뇌혈관질환' 치료를 직접적인 목적으로 상급종합병원에 통원하였을 때</td><td class="num"><span class="ohl">10만원</span></td></tr>
+<tr><td class="cat">뇌혈관질환 통원급여금</td><td>'뇌혈관질환'으로 진단이 확정되고 보험기간 중 그 '뇌혈관질환' 치료를 직접적인 목적으로 통원하였을 때</td><td class="num"><span class="ohl">2만원</span></td></tr>
+</tbody>
+</table>
+<p class="indent">※ 통원 1회당 지급하며, 연간 30회를 한도로 합니다.</p>
+<div class="footer-line">백세팔팔NH건강보험 약관 [2601개정] · 98 of 142</div>
+</div>`
+ },
+
+ 'sabang-all': {
+ meta: 'HWP · 24p · 사업방법서 발췌 2개 페이지',
+ html: `
+<div class="paper" data-pagelabel="p.5 / 24">
+<div class="ph1">제 3 장 가입조건</div>
+<div class="ph2">제 3.1 절 가입연령</div>
+<p>이 보험의 가입연령은 다음 표에 따른다.</p>
+<table class="htbl">
+<thead><tr><th>구분</th><th>1형(간편가입형Ⅱ)</th><th>2형(일반가입형)</th></tr></thead>
+<tbody>
+<tr><td class="cat">주계약 1종(갱신형)</td><td class="num"><span class="ohl">20세</span>~<span class="ohl">80세</span></td><td class="num">만<span class="ohl">15세</span>~<span class="ohl">70세</span></td></tr>
+<tr><td class="cat">주계약 2종(비갱신형)</td><td class="num"><span class="ohl">20세</span>~<span class="ohl">79세</span></td><td class="num">만 15세 ~ 70세</td></tr>
+<tr><td class="cat">특약</td><td colspan="2" style="text-align:center;">주계약과 동일 (일부 특약 제외)</td></tr>
+</tbody>
+</table>
+<p class="indent">※ 1형(간편가입형Ⅱ)은 간편심사보험으로 일반심사보험보다 보험료가 다소 높을 수 있다.</p>
+<p class="indent">※ 특정 특약은 1형(간편가입형Ⅱ)에 부가할 수 없다.</p>
+</div>
+
+<div class="paper" data-pagelabel="p.7 / 24">
+<div class="ph2">제 3.3 절 보험기간 및 납입기간</div>
+<p>주계약의 보험기간 및 납입기간은 다음 표에 따른다.</p>
+<table class="htbl">
+<thead><tr><th>주계약</th><th>형태</th><th>보험기간</th><th>납입기간</th></tr></thead>
+<tbody>
+<tr><td rowspan="2" class="cat">1종(갱신형)</td><td>순수보장형</td><td><span class="ohl">20년 만기</span>(최대 100세)</td><td><span class="ohl">10/15년</span>· 전기납</td></tr>
+<tr><td>건강관리형</td><td>20년 만기 (최대 100세)</td><td>10/15년 · 전기납</td></tr>
+<tr><td rowspan="2" class="cat">2종(비갱신형)</td><td>순수보장형</td><td><span class="ohl">100세 만기</span></td><td>10/15/20/30년납</td></tr>
+<tr><td>건강관리형</td><td>100세 만기</td><td>10/15/20/30년납</td></tr>
+</tbody>
+</table>
+<div class="ph3">제 4.2 절 보험료 납입주기</div>
+<div class="quote-block">
+ 보험료 납입주기는<span class="ohl">월납, 3개월납, 6개월납, 연납</span>의 4가지로 한다.
+</div>
+<div class="footer-line">백세팔팔NH건강보험 사업방법서 [2506개정]</div>
+</div>`
+ },
+
+ 'pvtable-all': {
+ meta: 'TXT (Fixed-width) · 10,320행 발췌',
+ html: `
+<div style="text-align:center; font-size:11px; color: var(--text-tertiary); margin-bottom:14px; max-width:700px; margin-left:auto; margin-right:auto;">
+ 파일은 16개 고정폭 컬럼으로 구성된 fixed-width text. Document Parse가 컬럼 위치를 자동 감지하여 schema로 변환.
+</div>
+<div class="raw-file" data-filename="P_백세팔팔NH건강보험_2506_1종(갱신형)_최초.txt">
+<span class="row"><span class="ln">1</span>I3050509 00 00 20 10 01 30 0 1 00 20250602 99991231<span class="v">5,600</span><span class="comment">// 1형 30세 순수 20년</span></span>
+<span class="row"><span class="ln">2</span>I3050509 00 00 20 10 01 40 0 1 00 20250602 99991231<span class="v">9,800</span><span class="comment">// 1형 40세 순수 20년</span></span>
+<span class="row"><span class="ln">3</span>I3050509 00 00 20 10 01 50 0 1 00 20250602 99991231<span class="v">16,500</span><span class="comment">// 1형 50세 순수 20년</span></span>
+<span class="row"><span class="ln">4</span>I3050509 00 00 20 10 03 30 0 1 00 20250602 99991231<span class="v">31,900</span><span class="comment">// 1형 30세 건강 100세</span></span>
+<span class="row"><span class="ln">5</span>I3050509 00 00 20 10 03 40 0 1 00 20250602 99991231<span class="v">48,700</span><span class="comment">// 1형 40세 건강 100세</span></span>
+<span class="row"><span class="ln">6</span>I3050509 00 00 20 10 03 50 0 1 00 20250602 99991231<span class="v">73,000</span><span class="comment">// 1형 50세 건강 100세</span></span>
+<span class="row"><span class="ln">7</span>I3050509 00 00 20 20 01 30 0 1 00 20250602 99991231<span class="v">4,500</span><span class="comment">// 2형 30세 순수 20년</span></span>
+<span class="row"><span class="ln">8</span>I3050509 00 00 20 20 01 40 0 1 00 20250602 99991231<span class="v">7,300</span><span class="comment">// 2형 40세 순수 20년</span></span>
+<span class="row"><span class="ln">9</span>I3050509 00 00 20 20 01 50 0 1 00 20250602 99991231<span class="v">12,100</span><span class="comment">// 2형 50세 순수 20년</span></span>
+<span class="row"><span class="ln">10</span>I3050509 00 00 20 20 03 30 0 1 00 20250602 99991231<span class="v">24,700</span><span class="comment">// 2형 30세 건강 100세</span></span>
+<span class="row err-hl"><span class="ln">11</span>I3050509 00 00 20 20 03 40 0 1 00 20250602 99991231<span class="v err">47,500</span><span class="comment">// 2형 40세 건강 100세 ★ 안내장 40,100 (불일치)</span></span>
+<span class="row"><span class="ln">12</span>I3050509 00 00 20 20 03 50 0 1 00 20250602 99991231<span class="v">73,200</span><span class="comment">// 2형 50세 건강 100세</span></span>
+<span class="row"><span class="ln">13</span>I3050509 00 00 20 10 01 20 0 1 00 20250602 99991231<span class="v">73</span><span class="comment">// 1형 20세 순수 20년</span></span>
+<span class="row"><span class="ln">14</span>I3050509 00 00 20 10 03 20 0 1 00 20250602 99991231<span class="v">217</span><span class="comment">// 1형 20세 건강 100세</span></span>
+<span class="row"><span class="ln">15</span>I3050509 00 00 20 10 06 20 0 1 00 20250602 99991231<span class="v">433</span><span class="comment">// 1형 20세 (plan 06)</span></span>
+<span class="row"><span class="ln">16</span>I3050509 00 00 20 10 12 20 0 1 00 20250602 99991231<span class="v">862</span><span class="comment">// 1형 20세 (plan 12)</span></span>
+<span class="row"><span class="ln">17</span>I3050509 00 00 20 10 01 21 0 1 00 20250602 99991231<span class="v">73</span></span>
+<span class="row"><span class="ln">18</span>I3050509 00 00 20 10 03 21 0 1 00 20250602 99991231<span class="v">218</span></span>
+<span class="row"><span class="ln">…</span><span class="comment">(5,576 rows in P_최초, 4,744 rows in P_갱신)</span></span>
+</div>
+<div style="text-align:center; font-size:10.5px; color: var(--text-tertiary); margin-top:8px;">
+ ↓ Document Parse가 컬럼 정의를 자동 감지하여 schema 추출
+</div>`
+ }
+};
+
+// ============================================================
+// DOCUMENT PARSE PLAYGROUND STATE & DATA
+// ============================================================
+const GUIDE_ELEMENTS = {};
+const ALL_ELEMENTS = {};
+
+// Playground state per tab
+const PG_STATE = {
+ 'source-parse': { docKey: null, page: 1, viewType: 'visual', resultType: 'preview', activeIdx: null },
+ 'guide-parse': { docKey: 'guide', page: 1, viewType: 'visual', resultType: 'preview', activeIdx: null }
+};
+
+// Doc metadata
+const PG_DOCS = {};
+
+function getElementsFor(docKey, page) {
+ if (docKey === 'guide') {
+ const p = GUIDE_ELEMENTS[page] || GUIDE_ELEMENTS[String(page)];
+ return p ? p.elements : [];
+ }
+ const doc = ALL_ELEMENTS[docKey];
+ if (!doc) return [];
+ return doc[page] || doc[String(page)] || [];
+}
+
+function getPageDims(docKey, page) {
+ if (docKey === 'guide') {
+ const p = GUIDE_ELEMENTS[page] || GUIDE_ELEMENTS[String(page)];
+ return p ? { pw: p.pw, ph: p.ph } : { pw: 1066, ph: 729 };
+ }
+ return { pw: 1, ph: 1 }; // text-only, % not used
+}
+
+function selectPgDoc(docKey, el) {
+ const tabName = el.closest('.tab-panel').dataset.tab;
+ document.querySelectorAll(`[data-tab="${tabName}"] .pg-doc-card`).forEach(c =>c.classList.remove('active'));
+ if (el) el.classList.add('active');
+ PG_STATE[tabName].docKey = docKey;
+ PG_STATE[tabName].page = 1;
+ PG_STATE[tabName].activeIdx = null;
+ renderPg(tabName);
+}
+
+function setViewType(tabName, vtype, el) {
+ PG_STATE[tabName].viewType = vtype;
+ document.querySelectorAll(`[data-tab="${tabName}"] .pg-btn-tab`).forEach(b =>b.classList.remove('active'));
+ if (el) el.classList.add('active');
+ renderPg(tabName);
+}
+
+function setResultType(tabName, rtype, el) {
+ PG_STATE[tabName].resultType = rtype;
+ document.querySelectorAll(`[data-tab="${tabName}"] .pg-result-tab`).forEach(b =>b.classList.remove('active'));
+ if (el) el.classList.add('active');
+ renderPgResult(tabName);
+}
+
+function pgChangePage(tabName, delta) {
+ const st = PG_STATE[tabName];
+ const doc = PG_DOCS[st.docKey];
+ st.page = Math.max(1, Math.min(doc.pages, st.page + delta));
+ st.activeIdx = null;
+ renderPg(tabName);
+}
+
+function renderPg(tabName) {
+  const st = PG_STATE[tabName];
+  const isSource = tabName === 'source-parse';
+  const viewerEl = document.getElementById(isSource ? 'pgSrcViewer' : 'pgGuideViewer');
+  const resultEl = document.getElementById(isSource ? 'pgSrcResult' : 'pgGuideResult');
+  const titleEl = isSource ? document.getElementById('pgSrcDocTitle') : null;
+  const pageIndEl = document.getElementById(isSource ? 'pgSrcPageInd' : 'pgGuidePageInd');
+
+  // Empty state
+  if (!st.docKey || !PG_DOCS[st.docKey]) {
+    const promptText = isSource
+      ? '왼쪽의 <b>원본 문서 업로드</b> 영역에 약관·사업방법서·PV테이블 등을 끌어놓으면 Upstage Document Parse 결과가 여기에 표시됩니다.'
+      : '왼쪽의 <b>검수 대상 안내장 업로드</b> 영역에 안내장 PDF를 끌어놓으면 Upstage Document Parse 결과가 여기에 표시됩니다.';
+    viewerEl.innerHTML = '<div class="pg-empty"><div class="empty-title">파일을 업로드해주세요</div><div class="empty-desc">' + promptText + '</div><div class="empty-arrow"></div><div class="empty-desc" style="font-size: 11px;">지원 형식 · ' + (isSource ? 'PDF · HWP · TXT' : 'PDF') + '<br>API 키 설정 시 Document Parse 호출 결과(element + bbox)가 함께 표시됩니다.</div></div>';
+    if (resultEl) resultEl.innerHTML = '<div class="pg-empty-result">업로드된 문서의 element / HTML / JSON 결과가 여기에 표시됩니다.</div>';
+    if (pageIndEl) pageIndEl.textContent = '- / -';
+    if (titleEl) titleEl.textContent = '문서 선택 안 됨';
+    return;
+  }
+  const doc = PG_DOCS[st.docKey];
+
+  if (titleEl) titleEl.textContent = doc.name;
+  pageIndEl.textContent = `${st.page} / ${doc.pages}`;
+
+ const elements = getElementsFor(st.docKey, st.page);
+
+ if (st.viewType === 'raw') {
+ // Plain text view
+ let raw = elements.map(e =>e.text).join('\n');
+ viewerEl.innerHTML = `<div class="pg-raw">${escapeHtml(raw)}</div>`;
+ } else {
+ // Visual view
+ if (doc.isPdf) {
+ const dims = getPageDims(st.docKey, st.page);
+ const aspectRatio = dims.ph / dims.pw;
+ // Find image path
+ const imgPath = `assets/pages/p-${st.page}.jpg`;
+ let bboxHtml = '';
+ elements.forEach(e =>{
+ if (e.left == null) return;
+ bboxHtml += `<div class="pg-bbox show-all" data-idx="${e.idx}" data-elem-idx="${e.idx}"
+ style="left:${e.left}%; top:${e.top}%; width:${e.width}%; height:${e.height}%;"
+ onclick="setActiveElem('${tabName}', ${e.idx})"></div>`;
+ });
+ viewerEl.innerHTML = `
+<div class="pg-page" style="width: 100%; max-width: 920px;">
+<img src="${imgPath}" alt="page ${st.page}">
+ ${bboxHtml}
+</div>`;
+ } else {
+ // Text document → paper-style with line-level bbox
+ let html = '<div class="pg-paper">';
+ elements.forEach(e =>{
+ const cat = e.cat.toLowerCase();
+ html += `<div class="pp-line ${cat}" data-elem-idx="${e.idx}" onclick="setActiveElem('${tabName}', ${e.idx})">
+<span class="pp-tag">${e.idx}</span>${escapeHtml(e.text)}
+</div>`;
+ });
+ html += '</div>';
+ viewerEl.innerHTML = html;
+ }
+ }
+
+ renderPgResult(tabName);
+}
+
+function renderPgResult(tabName) {
+ const st = PG_STATE[tabName];
+ const doc = PG_DOCS[st.docKey];
+ const isSource = tabName === 'source-parse';
+ const resultEl = document.getElementById(isSource ? 'pgSrcResult' : 'pgGuideResult');
+ const elements = getElementsFor(st.docKey, st.page);
+
+ if (st.resultType === 'preview') {
+ let html = `<div style="font-size: 10.5px; color: var(--text-tertiary); margin-bottom: 8px; padding: 4px 6px;">페이지 ${st.page} · ${elements.length} elements</div>`;
+ elements.forEach(e =>{
+ const cat = e.cat.toLowerCase();
+ const isActive = st.activeIdx === e.idx;
+ html += `<div class="pg-elem ${cat} ${isActive ? 'active' : ''}" data-elem-idx="${e.idx}" onclick="setActiveElem('${tabName}', ${e.idx})">
+<div class="pg-elem-head">
+<span class="pg-elem-idx">${e.idx}</span>
+<span class="pg-elem-cat ${cat}">${e.cat}</span>
+</div>
+<div class="pg-elem-text">${escapeHtml(e.text)}</div>
+</div>`;
+ });
+ resultEl.innerHTML = html;
+ } else if (st.resultType === 'html') {
+ let html = '<div class="pg-html-view">';
+ elements.forEach(e =>{
+ const tag = ({'Heading1':'h1','Heading2':'h2','Heading3':'h3','Paragraph':'p','Footer':'footer','Header':'header','Caption':'caption','ListItem':'li','Footnote':'sub','Table':'table','TableRow':'tr','TableCell':'td'})[e.cat] || 'p';
+ html += `<span class="tag">&lt;${tag}<span class="attr">id="${e.idx}"</span>&gt;</span><span class="text">${escapeHtml(e.text)}</span><span class="tag">&lt;/${tag}&gt;</span>\n`;
+ });
+ html += '</div>';
+ resultEl.innerHTML = html;
+ } else {
+ // JSON
+ const obj = {
+ api: 'document-digitization',
+ job_id: doc.jobId,
+ page: st.page,
+ elements: elements.map(e =>({ id: e.idx, category: e.cat, text: e.text, ...(e.left!=null ? { coordinates: { x: e.left, y: e.top, w: e.width, h: e.height } } : {}) }))
+ };
+ resultEl.innerHTML = `<div class="pg-html-view">${escapeHtml(JSON.stringify(obj, null, 2))}</div>`;
+ }
+}
+
+function setActiveElem(tabName, idx) {
+ PG_STATE[tabName].activeIdx = idx;
+ // Update bbox active state
+ const viewerSel = tabName === 'source-parse' ? '#pgSrcViewer' : '#pgGuideViewer';
+ document.querySelectorAll(`${viewerSel} .pg-bbox`).forEach(b =>b.classList.toggle('active', parseInt(b.dataset.elemIdx) === idx));
+ document.querySelectorAll(`${viewerSel} .pp-line`).forEach(b =>b.classList.toggle('active', parseInt(b.dataset.elemIdx) === idx));
+ // Update result list
+ renderPgResult(tabName);
+ // Scroll result to active
+ setTimeout(() =>{
+ const elemSel = tabName === 'source-parse' ? '#pgSrcResult' : '#pgGuideResult';
+ const target = document.querySelector(`${elemSel} .pg-elem.active`);
+ if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ }, 50);
+}
+
+function escapeHtml(s) {
+ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ============================================================
+// FILE UPLOAD + UPSTAGE API CALL
+// ============================================================
+function ensurePdfJs() {
+ if (typeof window.pdfjsLib === 'undefined') {
+ throw new Error('PDF.js가 로드되지 않았습니다. file://에서 직접 열지 말고 호스팅 환경(Netlify/GitHub Pages) 또는 로컬 HTTP 서버(예: python -m http.server)에서 실행하세요.');
+ }
+ if (window.pdfjsLib.GlobalWorkerOptions && !window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+ window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ }
+}
+
+const UPLOADED_DOCS = {}; // { key: { name, type, pages: {pn: {pw,ph,elements,imgDataUrl}} } }
+let uploadedCounter = 0;
+
+function handleDragOver(e) {
+ e.preventDefault();
+ e.currentTarget.classList.add('dragover');
+}
+function handleDragLeave(e) {
+ e.currentTarget.classList.remove('dragover');
+}
+async function handleDrop(e, tabName) {
+ e.preventDefault();
+ e.currentTarget.classList.remove('dragover');
+ const files = Array.from(e.dataTransfer.files);
+ for (const f of files) await processFile(f, tabName);
+}
+async function handleUpload(e, tabName) {
+ const files = Array.from(e.target.files);
+ for (const f of files) await processFile(f, tabName);
+ e.target.value = '';
+}
+
+async function processFile(file, tabName) {
+ uploadedCounter++;
+ const docKey = `upload_${uploadedCounter}`;
+ const ext = file.name.split('.').pop().toLowerCase();
+ const iconType = ext === 'pdf' ? 'pdf' : ext === 'hwp' ? 'hwp' : 'txt';
+
+ // Register doc
+ PG_DOCS[docKey] = {
+ name: file.name.length >28 ? file.name.substring(0, 26) + '..' : file.name,
+ file: file.name,
+ isPdf: ext === 'pdf',
+ pages: 1,
+ jobId: 'uploading...',
+ uploaded: true,
+ uploadType: iconType
+ };
+ UPLOADED_DOCS[docKey] = { name: file.name, type: ext, pages: {} };
+
+ // Add card to sidebar
+ const listEl = document.getElementById(tabName === 'source-parse' ? 'pgSrcDocList' : 'pgGuideDocList');
+ const emptyHint = listEl.querySelector('.pg-empty-list');
+ if (emptyHint) emptyHint.remove();
+ const card = document.createElement('div');
+ card.className = 'pg-doc-card uploaded processing';
+ card.dataset.pgkey = docKey;
+ card.onclick = () =>selectPgDoc(docKey, card);
+ card.innerHTML = `
+<button class="pg-doc-remove" onclick="event.stopPropagation(); removeUploadedDoc('${docKey}', '${tabName}')">×</button>
+<div class="pg-doc-ico ${iconType}">${iconType.toUpperCase()}<span class="pg-doc-check"></span></div>
+<div class="pg-doc-name">${PG_DOCS[docKey].name}</div>
+<div class="pg-doc-sub">${(file.size/1024).toFixed(1)} KB · 파싱 중...</div>
+ `;
+ listEl.appendChild(card);
+
+ // Activate
+ selectPgDoc(docKey, card);
+
+ // Show loading
+ const loadingEl = document.getElementById(tabName === 'source-parse' ? 'pgSrcLoading' : 'pgGuideLoading');
+ if (loadingEl) loadingEl.classList.add('show');
+
+ try {
+ // 1) Client-side PDF render (preview)
+ if (ext === 'pdf') {
+ await renderPdfPages(file, docKey);
+ } else {
+ // Text-based: read as text
+ const text = await file.text();
+ const lines = text.split('\n').filter(l =>l.trim());
+ // Split into 30-line pages
+ const pgs = {};
+ let curPg = 1, lc = 0, idx = 0;
+ pgs[curPg] = [];
+ for (const line of lines) {
+ idx++; lc++;
+ pgs[curPg].push({
+ idx,
+ cat: ext === 'txt' ? 'TableRow' : 'Paragraph',
+ text: line.trim().substring(0, 300)
+ });
+ if (lc >= 30) { curPg++; pgs[curPg] = []; lc = 0; }
+ }
+ UPLOADED_DOCS[docKey].pages = pgs;
+ PG_DOCS[docKey].pages = Object.keys(pgs).length;
+ }
+
+ // 2) Try real Upstage API call (if PDF and API key present)
+ if (ext === 'pdf' && apiKey) {
+ await callUpstageParse(file, docKey);
+ }
+
+ // Update card
+ card.classList.remove('processing');
+ const checkSpan = card.querySelector('.pg-doc-check');
+ if (checkSpan) checkSpan.textContent = '';
+ const subEl = card.querySelector('.pg-doc-sub');
+ if (subEl) subEl.textContent = `${(file.size/1024).toFixed(1)} KB · ${PG_DOCS[docKey].pages}p · 파싱 완료`;
+
+ // Refresh view
+ renderPg(tabName);
+ } catch (err) {
+ console.error('Upload error:', err);
+ const subEl = card.querySelector('.pg-doc-sub');
+ if (subEl) subEl.textContent = `오류: ${err.message.substring(0, 30)}`;
+ card.classList.remove('processing');
+ } finally {
+ if (loadingEl) loadingEl.classList.remove('show');
+ if (typeof updateRunReviewBtn === 'function') updateRunReviewBtn();
+ }
+}
+
+async function renderPdfPages(file, docKey) {
+ ensurePdfJs();
+ const arrayBuffer = await file.arrayBuffer();
+ const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+ const pgs = {};
+ for (let pn = 1; pn<= pdf.numPages; pn++) {
+ const page = await pdf.getPage(pn);
+ const viewport = page.getViewport({ scale: 1.5 });
+ const canvas = document.createElement('canvas');
+ canvas.width = viewport.width;
+ canvas.height = viewport.height;
+ const ctx = canvas.getContext('2d');
+ await page.render({ canvasContext: ctx, viewport }).promise;
+ const imgUrl = canvas.toDataURL('image/jpeg', 0.85);
+ pgs[pn] = {
+ pw: viewport.width,
+ ph: viewport.height,
+ imgDataUrl: imgUrl,
+ elements: []
+ };
+ }
+ UPLOADED_DOCS[docKey].pages = pgs;
+ PG_DOCS[docKey].pages = pdf.numPages;
+}
+
+async function callUpstageParse(file, docKey) {
+ const fd = new FormData();
+ fd.append('document', file);
+ fd.append('model', 'document-parse');
+ fd.append('output_formats', '["html","text"]');
+ fd.append('coordinates', 'true');
+
+ // Prefer same-origin proxy (/api/parse) when hosted (Vercel/Netlify with function)
+ // This avoids CORS. Fallback to direct call for static-only hosting.
+ const isLocalFile = location.protocol === 'file:';
+ const tryProxy = !isLocalFile;
+ const endpoint = tryProxy ? '/api/parse' : 'https://api.upstage.ai/v1/document-digitization';
+
+ let res = await fetch(endpoint, {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${apiKey}` },
+ body: fd
+ });
+
+ // If proxy 404 (Netlify static / no function), fallback to direct
+ if (tryProxy && res.status === 404) {
+ res = await fetch('https://api.upstage.ai/v1/document-digitization', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${apiKey}` },
+ body: fd
+ });
+ }
+ if (!res.ok) {
+ throw new Error(`API ${res.status}: ${(await res.text()).substring(0, 100)}`);
+ }
+ const json = await res.json();
+ PG_DOCS[docKey].jobId = json.api_id || json.id || 'upstage_parse';
+
+ // Convert API response to our element format
+ const elementsByPage = {};
+ if (json.elements && Array.isArray(json.elements)) {
+ json.elements.forEach((el, i) =>{
+ const pn = el.page || 1;
+ if (!elementsByPage[pn]) elementsByPage[pn] = [];
+ const coords = el.coordinates || el.bounding_box || null;
+ let bbox = {};
+ if (coords && Array.isArray(coords) && coords.length >= 4) {
+ // Coords are typically [{x,y}, ...] (4 corners). Compute bbox.
+ const xs = coords.map(c =>c.x);
+ const ys = coords.map(c =>c.y);
+ bbox = {
+ left: Math.min(...xs) * 100,
+ top: Math.min(...ys) * 100,
+ width: (Math.max(...xs) - Math.min(...xs)) * 100,
+ height: (Math.max(...ys) - Math.min(...ys)) * 100
+ };
+ }
+ elementsByPage[pn].push({
+ idx: el.id || i + 1,
+ cat: el.category || 'Paragraph',
+ text: (el.content?.text || el.text || '').substring(0, 300),
+ ...bbox
+ });
+ });
+ }
+ // Merge into existing pages
+ for (const pn in elementsByPage) {
+ if (!UPLOADED_DOCS[docKey].pages[pn]) {
+ UPLOADED_DOCS[docKey].pages[pn] = { pw: 1, ph: 1, elements: [] };
+ }
+ UPLOADED_DOCS[docKey].pages[pn].elements = elementsByPage[pn];
+ }
+}
+
+function removeUploadedDoc(docKey, tabName) {
+ delete UPLOADED_DOCS[docKey];
+ delete PG_DOCS[docKey];
+ document.querySelector(`[data-pgkey="${docKey}"]`).remove();
+ // Switch to first remaining doc
+ const tabPanel = document.querySelector(`.tab-panel[data-tab="${tabName}"]`);
+ const firstCard = tabPanel.querySelector('.pg-doc-card');
+ if (firstCard) selectPgDoc(firstCard.dataset.pgkey, firstCard);
+ if (typeof updateRunReviewBtn === 'function') updateRunReviewBtn();
+}
+
+// Override getElementsFor / getPageDims to support uploaded docs
+const _origGetElems = getElementsFor;
+getElementsFor = function(docKey, page) {
+ if (UPLOADED_DOCS[docKey]) {
+ const pg = UPLOADED_DOCS[docKey].pages[page];
+ return pg ? pg.elements || [] : [];
+ }
+ return _origGetElems(docKey, page);
+};
+
+const _origGetDims = getPageDims;
+getPageDims = function(docKey, page) {
+ if (UPLOADED_DOCS[docKey]) {
+ const pg = UPLOADED_DOCS[docKey].pages[page];
+ return pg ? { pw: pg.pw, ph: pg.ph } : { pw: 1, ph: 1 };
+ }
+ return _origGetDims(docKey, page);
+};
+
+// Override renderPg to handle uploaded PDF pages (use data URL instead of asset path)
+const _origRenderPg = renderPg;
+renderPg = function(tabName) {
+ const st = PG_STATE[tabName];
+ const doc = PG_DOCS[st.docKey];
+ if (UPLOADED_DOCS[st.docKey] && doc.isPdf && st.viewType === 'visual') {
+ const isSource = tabName === 'source-parse';
+ const viewerEl = document.getElementById(isSource ? 'pgSrcViewer' : 'pgGuideViewer');
+ const titleEl = isSource ? document.getElementById('pgSrcDocTitle') : null;
+ const pageIndEl = document.getElementById(isSource ? 'pgSrcPageInd' : 'pgGuidePageInd');
+ if (titleEl) titleEl.textContent = doc.name;
+ pageIndEl.textContent = `${st.page} / ${doc.pages}`;
+
+ const pg = UPLOADED_DOCS[st.docKey].pages[st.page];
+ if (!pg) { viewerEl.innerHTML = '<div class="pg-empty">페이지를 찾을 수 없음</div>'; return; }
+ const elements = pg.elements || [];
+ let bboxHtml = '';
+ elements.forEach(e =>{
+ if (e.left == null) return;
+ bboxHtml += `<div class="pg-bbox show-all" data-idx="${e.idx}" data-elem-idx="${e.idx}"
+ style="left:${e.left}%; top:${e.top}%; width:${e.width}%; height:${e.height}%;"
+ onclick="setActiveElem('${tabName}', ${e.idx})"></div>`;
+ });
+ viewerEl.innerHTML = `
+<div class="pg-page" style="width: 100%; max-width: 920px;">
+<img src="${pg.imgDataUrl}" alt="page ${st.page}">
+ ${bboxHtml}
+</div>`;
+ renderPgResult(tabName);
+ return;
+ }
+ return _origRenderPg(tabName);
+};
+
+function renderGuideParseTab() {
+ const data = SOURCE_DATA['guide-all'];
+ if (!data) return;
+ document.getElementById('gp-body').innerHTML = data.html;
+ document.querySelector('[data-tab="guide-parse"] .parse-canvas').scrollTop = 0;
+}
+
+// Re-route sidebar (in review tab) clicks to corresponding parse tabs
+const _origShowDocParse = showDocParse;
+showDocParse = function(allKey, el) {
+ // Mark sidebar active for visual feedback
+ document.querySelectorAll('.doc-item').forEach(d =>d.classList.remove('active'));
+ if (el) el.classList.add('active');
+ // Clear review state
+ clearBboxes();
+ document.querySelectorAll('.review-item').forEach(c =>c.classList.remove('selected'));
+
+ if (allKey === 'guide-all') {
+ switchTab('guide-parse');
+ const card = document.querySelector(`[data-tab="guide-parse"] .pg-doc-card[data-pgkey="guide"]`);
+ if (card) selectPgDoc('guide', card);
+ } else {
+ switchTab('source-parse');
+ const key = allKey.replace('-all', '');
+ const card = document.querySelector(`[data-tab="source-parse"] .pg-doc-card[data-pgkey="${key}"]`);
+ if (card) selectPgDoc(key, card);
+ }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+renderCategory('coverage');
+renderPg('source-parse');
+renderPg('guide-parse');
+updateRunReviewBtn();
+updateReviewStats();
+</script>
+</body>
+</html>

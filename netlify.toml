@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/api/parse"
+  to = "https://api.upstage.ai/v1/document-digitization"
+  status = 200
+  force = true
+  headers = { X-From = "netlify-proxy" }
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"

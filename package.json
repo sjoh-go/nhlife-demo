@@ -1,0 +1,9 @@
+{
+  "name": "nh-life-review-demo",
+  "version": "1.0.0",
+  "description": "NH농협생명 안내장 자동 검수 데모 (Upstage Document Parse 기반)",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}
