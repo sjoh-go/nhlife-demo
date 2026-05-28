@@ -1772,21 +1772,21 @@ input, select, textarea { font-family: inherit; }
 </div>
 
 <div class="workflow">
-<div class="workflow-step done">
+<div class="workflow-step">
 <div class="step-num"><span>1</span></div>
-<div class="step-label">Document Parse<div class="sub">PDF·HWP·TXT → 워드 layout</div></div>
+<div class="step-label">문서 업로드<div class="sub">PDF · HWP · TXT</div></div>
 </div>
-<div class="workflow-step done">
+<div class="workflow-step">
 <div class="step-num"><span>2</span></div>
+<div class="step-label">Document Parse<div class="sub">워드 단위 layout 추출</div></div>
+</div>
+<div class="workflow-step">
+<div class="step-num"><span>3</span></div>
 <div class="step-label">Information Extraction<div class="sub">스키마 기반 항목 추출</div></div>
 </div>
-<div class="workflow-step done">
-<div class="step-num"><span>3</span></div>
-<div class="step-label">Solar LLM 대조<div class="sub">정합성·의미 비교</div></div>
-</div>
-<div class="workflow-step active">
+<div class="workflow-step">
 <div class="step-num"><span>4</span></div>
-<div class="step-label">검수 리포트<div class="sub">21 OK · 2 경고 · 1 불일치</div></div>
+<div class="step-label">Solar LLM 검수<div class="sub">안내장 vs 원본 정합성 비교</div></div>
 </div>
 </div>
 </div>
@@ -2027,15 +2027,14 @@ input, select, textarea { font-family: inherit; }
 <!-- ACTION BAR -->
 <div class="action-bar">
 <div class="summary">
-<div>검수<strong>100%</strong>(24/24)</div>
-<div>일치<strong style="color: var(--success);">21</strong></div>
-<div>경고<strong style="color: var(--warning);">2</strong></div>
-<div>불일치<strong style="color: var(--danger);">1</strong></div>
-<div>API<strong>7회</strong>· 처리<strong>14.2초</strong></div>
+<div>검수<strong id="abTotalProgress">0</strong>건 완료</div>
+<div>일치<strong id="abOk" style="color: var(--success);">0</strong></div>
+<div>경고<strong id="abWarn" style="color: var(--warning);">0</strong></div>
+<div>불일치<strong id="abErr" style="color: var(--danger);">0</strong></div>
 </div>
 <div style="display:flex; gap:8px;">
-<button class="btn-action outline" onclick="runRealApi()">실제 API 재호출</button>
-<button class="btn-action primary">검수 리포트 발행 →</button>
+<button class="btn-action outline" onclick="runReview()">검수 재실행</button>
+<button class="btn-action primary" onclick="alert('검수 리포트 발행은 데모용 기능입니다.')">검수 리포트 발행</button>
 </div>
 </div>
 
@@ -2948,6 +2947,14 @@ function updateReviewStats() {
     document.getElementById('statErr').textContent = err;
     document.getElementById('statTotal').textContent = total;
   }
+  // Action bar
+  const abTP = document.getElementById('abTotalProgress');
+  if (abTP) {
+    abTP.textContent = total;
+    document.getElementById('abOk').textContent = ok;
+    document.getElementById('abWarn').textContent = warn;
+    document.getElementById('abErr').textContent = err;
+  }
   ['coverage','rider','eligibility','premium'].forEach(cat => {
     const items = (REVIEW_DATA[cat] && REVIEW_DATA[cat].items) || [];
     const hasErr = items.some(i => i.status === 'err');
@@ -3649,9 +3656,15 @@ async function processFile(file, tabName) {
  if (loadingEl) loadingEl.classList.add('show');
 
  try {
- // 1) Client-side PDF render (preview)
+ // 1) Client-side PDF render (preview, may fail in file:// — non-fatal)
  if (ext === 'pdf') {
- await renderPdfPages(file, docKey);
+ try {
+   await renderPdfPages(file, docKey);
+ } catch (renderErr) {
+   console.warn('PDF preview failed:', renderErr);
+   UPLOADED_DOCS[docKey].pages = { 1: { pw: 1, ph: 1, elements: [], imgDataUrl: null, noPreview: true } };
+   PG_DOCS[docKey].pages = 1;
+ }
  } else {
  // Text-based: read as text
  const text = await file.text();
@@ -3699,7 +3712,16 @@ async function processFile(file, tabName) {
 }
 
 async function renderPdfPages(file, docKey) {
- ensurePdfJs();
+ if (typeof window.pdfjsLib === 'undefined') {
+   // PDF.js fallback: skip preview but allow API call
+   console.warn('PDF.js not loaded — skipping client preview. Document Parse still attempted.');
+   UPLOADED_DOCS[docKey].pages = { 1: { pw: 1, ph: 1, elements: [], imgDataUrl: null, noPreview: true } };
+   PG_DOCS[docKey].pages = 1;
+   return;
+ }
+ if (window.pdfjsLib.GlobalWorkerOptions && !window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+   window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ }
  const arrayBuffer = await file.arrayBuffer();
  const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
  const pgs = {};
@@ -3836,7 +3858,13 @@ renderPg = function(tabName) {
  pageIndEl.textContent = `${st.page} / ${doc.pages}`;
 
  const pg = UPLOADED_DOCS[st.docKey].pages[st.page];
- if (!pg) { viewerEl.innerHTML = '<div class="pg-empty">페이지를 찾을 수 없음</div>'; return; }
+ if (!pg) { viewerEl.innerHTML = '<div class="pg-empty"><div class="empty-title">페이지를 찾을 수 없음</div></div>'; return; }
+ if (pg.noPreview || !pg.imgDataUrl) {
+   const elemCount = (pg.elements || []).length;
+   viewerEl.innerHTML = '<div class="pg-empty"><div class="empty-title">PDF 미리보기를 표시할 수 없습니다</div><div class="empty-desc">현재 환경(file:// 또는 PDF.js CDN 차단)에서는 페이지 미리보기를 만들 수 없습니다.<br><b>호스팅된 URL (Vercel 등)에서 열면 미리보기가 함께 표시됩니다.</b></div><div class="empty-arrow"></div><div class="empty-desc">Document Parse 결과: <b>' + elemCount + '개 element</b> 추출됨<br>우측 결과 패널에서 확인하세요.</div></div>';
+   renderPgResult(tabName);
+   return;
+ }
  const elements = pg.elements || [];
  let bboxHtml = '';
  elements.forEach(e =>{
